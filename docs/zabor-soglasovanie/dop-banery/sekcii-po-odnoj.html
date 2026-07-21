@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>14 секций по одной · Доп. баннеры · KB</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --dark: #1A1512;
+    --cream: #F5F0EB;
+    --gold: #C9A96E;
+    --gold-dim: rgba(201,169,110,.35);
+    --muted: #A89F96;
+    --panel-w: 1280px;
+    --panel-h: 400px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: Inter, sans-serif;
+    background: #0E0C0A;
+    color: var(--cream);
+    padding: 36px 24px 72px;
+  }
+  .head {
+    max-width: 880px;
+    margin: 0 auto 36px;
+    text-align: center;
+  }
+  .head h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 600;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .head p { font-size: 13px; color: var(--muted); line-height: 1.65; }
+  .back {
+    display: inline-block;
+    margin-bottom: 20px;
+    font-size: 12px;
+    color: var(--gold);
+    text-decoration: none;
+  }
+  .back:hover { text-decoration: underline; }
+
+  .panel {
+    width: var(--panel-w);
+    height: var(--panel-h);
+    flex-shrink: 0;
+    display: flex;
+    overflow: hidden;
+    background: var(--dark);
+  }
+  .ph {
+    background-size: cover;
+    background-position: center;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .ph::after { content: ''; position: absolute; inset: 0; pointer-events: none; }
+  .p-rank .ph::after {
+    background: linear-gradient(to left, rgba(26,21,18,.85) 0%, rgba(26,21,18,.2) 24%, transparent 48%);
+  }
+  .p-anchor .ph::after {
+    background: linear-gradient(to right, rgba(26,21,18,.8) 0%, transparent 42%);
+  }
+  .p-anchor.flip .ph::after {
+    background: linear-gradient(to left, rgba(26,21,18,.8) 0%, transparent 42%);
+  }
+  .dark {
+    background: var(--dark);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 28px 32px;
+    border-left: 1px solid var(--gold-dim);
+  }
+  .logo { width: 192px; margin-bottom: 14px; opacity: .98; }
+  .logo.sm { width: 156px; margin-bottom: 10px; }
+  .lbl {
+    font-size: 14px; font-weight: 600; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 10px; line-height: 1.45;
+  }
+  .lbl.full { max-width: 96%; }
+  .title {
+    font-family: 'Cormorant Garamond', serif; font-size: 54px; font-weight: 600;
+    line-height: 1.08; color: var(--cream); margin-bottom: 10px;
+  }
+  .title.md { font-size: 42px; }
+  .title.sm { font-size: 35px; }
+  .sub {
+    font-family: 'Cormorant Garamond', serif; font-size: 16px; font-style: italic;
+    color: var(--gold); line-height: 1.4;
+  }
+  .sub.plain {
+    font-family: Inter, sans-serif; font-style: normal; font-size: 11px;
+    color: var(--muted); letter-spacing: .04em; line-height: 1.55; max-width: 90%;
+  }
+  .orn {
+    width: 36px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 12px 0;
+  }
+  .rank-name {
+    font-family: 'Cormorant Garamond', serif; font-size: 28px;
+    font-weight: 600; line-height: 1.15; margin-bottom: 8px;
+  }
+  .rank-utp { font-size: 11px; color: var(--muted); line-height: 1.5; max-width: 95%; }
+  .badge {
+    margin-top: 10px; font-size: 8px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--gold); border: 1px solid var(--gold-dim); padding: 4px 10px; border-radius: 999px;
+  }
+  .qr-wrap { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .qr-link { display: inline-block; text-decoration: none; }
+  .qr { width: 80px; height: 80px; background: var(--cream); padding: 4px; }
+  .qr img { width: 100%; height: 100%; display: block; }
+  .qr.sm { width: 64px; height: 64px; margin-top: 12px; }
+  .url { font-family: 'Cormorant Garamond', serif; font-size: 16px; color: var(--gold); }
+
+  .p-anchor .ph { width: 52%; }
+  .p-anchor .dark { width: 48%; }
+  .p-anchor.flip { flex-direction: row-reverse; }
+  .p-anchor.flip .dark { border-left: none; border-right: 1px solid var(--gold-dim); }
+  .p-rank .ph { width: 66%; }
+  .p-rank .dark { width: 34%; }
+  .p-qr .dark { width: 100%; border: none; }
+
+  .grid-title {
+    text-align: center; font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; margin: 0 0 28px; color: var(--cream);
+  }
+  .grid {
+    display: grid; grid-template-columns: 1fr; gap: 32px;
+    max-width: var(--panel-w); margin: 0 auto;
+  }
+  .grid .cap {
+    font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+    color: #6B6560; margin-bottom: 8px;
+  }
+  .grid .panel {
+    border: 1px solid rgba(201,169,110,.15);
+    box-shadow: 0 12px 40px rgba(0,0,0,.35);
+    width: 100%;
+  }
+  @media (max-width: 1320px) {
+    :root { --panel-w: 100%; }
+    .panel { height: auto; min-height: 280px; flex-wrap: wrap; }
+    .p-anchor .ph, .p-anchor .dark, .p-rank .ph, .p-rank .dark { width: 100%; min-height: 200px; }
+    .p-anchor, .p-rank { flex-direction: column; }
+    .p-anchor.flip { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<a class="back" href="index.html">← Доп. баннеры</a>
+
+<div class="head">
+  <h1>14 секций по одной</h1>
+  <p>Вариант 1 · тёмный + фото · 8000 × 2500 мм каждая · для сверки текстов и композиции перед печатью</p>
+</div>
+
+<div class="grid-title">Ключевые секции забора</div>
+<div class="grid">
+
+  <div>
+    <div class="cap">Секция 1 · якорь</div>
+    <div class="panel p-anchor">
+      <div class="dark">
+        <img class="logo" src="../fence-assets/logo-mark.svg" alt="">
+        <div class="orn"></div>
+        <div class="lbl full">Физкультурно-оздоровительный комплекс</div>
+        <div class="title md">«Красногорские бани»</div>
+        <div class="sub">Баня будущего</div>
+      </div>
+      <div class="ph" style="background-image:url('../fence-kb-photos/hero.jpg')"></div>
+    </div>
+  </div>
+
+  <div>
+    <div class="cap">Секция 2 · мужской разряд</div>
+    <div class="panel p-rank">
+      <div class="ph" style="background-image:url('../fence-kb-photos/male.jpg')"></div>
+      <div class="dark">
+        <div class="lbl">Разряд</div>
+        <div class="rank-name">Мужской<br>разряд</div>
+        <div class="orn"></div>
+        <div class="rank-utp">Самая большая парная<br>в Московской области</div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="cap">Секция 3 · женский разряд</div>
+    <div class="panel p-rank">
+      <div class="ph" style="background-image:url('../fence-kb-photos/female.jpg')"></div>
+      <div class="dark">
+        <div class="lbl">Разряд</div>
+        <div class="rank-name">Женский<br>разряд</div>
+        <div class="orn"></div>
+        <div class="rank-utp">Мягкий пар · SPA</div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="cap">Секция 4 · семейный разряд</div>
+    <div class="panel p-rank">
+      <div class="ph" style="background-image:url('../fence-kb-photos/family.jpg')"></div>
+      <div class="dark">
+        <div class="lbl">Разряд</div>
+        <div class="rank-name">Семейный<br>разряд</div>
+        <div class="orn"></div>
+        <div class="rank-utp">Качественный пар · ресторан</div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="cap">Секция 5 · якорь</div>
+    <div class="panel p-anchor flip">
+      <div class="dark">
+        <img class="logo sm" src="../fence-assets/logo-mark.svg" alt="">
+        <div class="lbl full">Физкультурно-оздоровительный комплекс</div>
+        <div class="title sm">«Красногорские бани»</div>
+        <div class="sub">Летом — зима. Зимой — лето.</div>
+      </div>
+      <div class="ph" style="background-image:url('../fence-kb-photos/screen.jpg')"></div>
+    </div>
+  </div>
+
+  <div>
+    <div class="cap">Секция 6 · высший разряд</div>
+    <div class="panel p-rank">
+      <div class="ph" style="background-image:url('../fence-kb-photos/high.jpg')"></div>
+      <div class="dark">
+        <div class="lbl">Разряд</div>
+        <div class="rank-name">Высший<br>разряд</div>
+        <div class="rank-utp">Статус · сервис · приватность</div>
+        <div class="badge">Скоро открытие</div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="cap">Секция 7 · премиум сьют</div>
+    <div class="panel p-rank">
+      <div class="ph" style="background-image:url('../fence-kb-photos/suite.jpg')"></div>
+      <div class="dark">
+        <div class="lbl">Разряд</div>
+        <div class="rank-name">Премиум<br>сьют</div>
+        <div class="rank-utp">Приватное пространство</div>
+        <div class="badge">Скоро открытие</div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="cap">Секция 8 · SPA</div>
+    <div class="panel p-rank">
+      <div class="ph" style="background-image:url('../fence-kb-photos/spa.jpg')"></div>
+      <div class="dark">
+        <div class="lbl">Зона</div>
+        <div class="rank-name">SPA</div>
+        <div class="rank-utp">Массаж · уход · восстановление</div>
+        <div class="badge">Скоро открытие</div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="cap">Секция 9 · якорь</div>
+    <div class="panel p-anchor">
+      <div class="dark">
+        <img class="logo sm" src="../fence-assets/logo-mark.svg" alt="">
+        <div class="lbl full">Физкультурно-оздоровительный комплекс</div>
+        <div class="title sm">«Красногорские бани»</div>
+      </div>
+      <div class="ph" style="background-image:url('../fence-kb-photos/pool.jpg')"></div>
+    </div>
+  </div>
+
+  <div>
+    <div class="cap">Секция 10 · тренажёрный зал</div>
+    <div class="panel p-rank">
+      <div class="ph" style="background-image:url('../fence-kb-photos/gym.jpg')"></div>
+      <div class="dark">
+        <div class="lbl">Комплекс</div>
+        <div class="rank-name">Тренажёрный<br>зал</div>
+        <div class="badge">Скоро открытие</div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="cap">Секция 11 · ресторан</div>
+    <div class="panel p-rank">
+      <div class="ph" style="background-image:url('../fence-kb-photos/restaurant.jpg')"></div>
+      <div class="dark">
+        <div class="lbl">Комплекс</div>
+        <div class="rank-name">Ресторан</div>
+        <div class="rank-utp">Авторская кухня</div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="cap">Секция 12 · QR + ФОК</div>
+    <div class="panel p-qr">
+      <div class="dark">
+        <div class="qr-wrap">
+          <img class="logo sm" src="../fence-assets/logo-mark.svg" alt="">
+          <div class="lbl full">Физкультурно-оздоровительный комплекс «Красногорские бани»</div>
+          <a class="qr-link" href="https://krasnogorskie-bani.ru" target="_blank" rel="noopener">
+            <div class="qr"><img src="../fence-kb-photos/qr-kb.png" alt="QR"></div>
+          </a>
+          <div class="url">krasnogorskie-bani.ru</div>
+          <div class="sub plain">Скоро открытие</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="cap">Секция 13 · женский разряд</div>
+    <div class="panel p-rank">
+      <div class="ph" style="background-image:url('../fence-kb-photos/female-parilka.jpg')"></div>
+      <div class="dark">
+        <div class="lbl">Разряд</div>
+        <div class="rank-name">Женский<br>разряд</div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="cap">Секция 14 · якорь финал</div>
+    <div class="panel p-anchor flip">
+      <div class="dark">
+        <img class="logo" src="../fence-assets/logo-mark.svg" alt="">
+        <div class="orn"></div>
+        <div class="lbl full">Физкультурно-оздоровительный комплекс</div>
+        <div class="title md">«Красногорские бани»</div>
+        <div class="sub">Русский пар на дровах</div>
+        <a class="qr-link" href="https://krasnogorskie-bani.ru" target="_blank" rel="noopener">
+          <div class="qr sm"><img src="../fence-kb-photos/qr-kb.png" alt="QR"></div>
+        </a>
+      </div>
+      <div class="ph" style="background-image:url('../fence-kb-photos/reception.jpg')"></div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
