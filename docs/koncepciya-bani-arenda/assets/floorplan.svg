@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="fpTitle">
+  <title id="fpTitle">Планировка двухэтажного банного сруба</title>
+  <defs>
+    <style>
+      .rm { fill:#F7F2EA; stroke:#2A221A; stroke-width:2; }
+      .lab { font-family:Georgia,serif; fill:#1C1410; font-size:13px; }
+      .sub { font-family:system-ui,sans-serif; fill:#6A6258; font-size:10px; }
+    </style>
+  </defs>
+  <rect width="800" height="420" fill="#EDE6DC"/>
+  <text x="40" y="36" class="lab" font-size="16">1 этаж — ритуал</text>
+  <g transform="translate(40,50)">
+    <rect class="rm" width="340" height="300"/>
+    <rect x="0" y="0" width="140" height="160" class="rm"/>
+    <text x="70" y="70" text-anchor="middle" class="lab">Комната отдыха</text>
+    <text x="70" y="88" text-anchor="middle" class="sub">камин · панорама</text>
+    <rect x="140" y="0" width="100" height="100" class="rm"/>
+    <text x="190" y="48" text-anchor="middle" class="lab">Парная</text>
+    <text x="190" y="64" text-anchor="middle" class="sub">6–8 чел.</text>
+    <rect x="240" y="0" width="100" height="100" class="rm"/>
+    <text x="290" y="48" text-anchor="middle" class="lab">Моечная</text>
+    <text x="290" y="64" text-anchor="middle" class="sub">душ · купель</text>
+    <rect x="140" y="100" width="100" height="60" class="rm"/>
+    <text x="190" y="134" text-anchor="middle" class="lab">Санузел</text>
+    <rect x="240" y="100" width="100" height="60" class="rm"/>
+    <text x="290" y="134" text-anchor="middle" class="lab">Тамбур</text>
+    <rect x="0" y="160" width="340" height="80" class="rm" fill="#E8DFD0"/>
+    <text x="170" y="198" text-anchor="middle" class="lab">Терраса к реке / саду</text>
+    <text x="170" y="216" text-anchor="middle" class="sub">деревянный настил · уличная купель</text>
+    <rect x="0" y="240" width="160" height="60" class="rm"/>
+    <text x="80" y="274" text-anchor="middle" class="lab">Кухня-бар</text>
+    <rect x="160" y="240" width="180" height="60" class="rm"/>
+    <text x="250" y="274" text-anchor="middle" class="lab">Лестница ↑</text>
+  </g>
+  <text x="420" y="36" class="lab" font-size="16">2 этаж — сон</text>
+  <g transform="translate(420,50)">
+    <rect class="rm" width="340" height="240"/>
+    <rect x="0" y="0" width="170" height="140" class="rm"/>
+    <text x="85" y="60" text-anchor="middle" class="lab">Спальня 1</text>
+    <text x="85" y="78" text-anchor="middle" class="sub">двуспальная · вид</text>
+    <rect x="170" y="0" width="170" height="140" class="rm"/>
+    <text x="255" y="60" text-anchor="middle" class="lab">Спальня 2</text>
+    <text x="255" y="78" text-anchor="middle" class="sub">или детская</text>
+    <rect x="0" y="140" width="220" height="100" class="rm"/>
+    <text x="110" y="185" text-anchor="middle" class="lab">Лофт-гостиная</text>
+    <text x="110" y="203" text-anchor="middle" class="sub">балкон · второй свет</text>
+    <rect x="220" y="140" width="120" height="100" class="rm"/>
+    <text x="280" y="185" text-anchor="middle" class="lab">Санузел</text>
+    <text x="280" y="203" text-anchor="middle" class="sub">+ гардероб</text>
+  </g>
+  <text x="420" y="330" class="sub">Вместимость: до 6 гостей · аренда от суток</text>
+  <text x="420" y="350" class="sub">Материал: архангельская сосна, рубка «в чашу»</text>
+</svg>

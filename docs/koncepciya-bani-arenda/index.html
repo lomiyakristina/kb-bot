@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Концепция · Срубы в аренду · Красногорские бани</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #14100C;
+  --wood: #3D2618;
+  --amber: #C9A96E;
+  --amber-soft: #E2C998;
+  --river: #1E4A4C;
+  --fog: #E4E0D8;
+  --paper: #F0EDE7;
+  --mute: #6E675E;
+  --line: rgba(20,16,12,.12);
+  --ease: cubic-bezier(.22,1,.36,1);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: Outfit, sans-serif;
+  color: var(--ink);
+  background: var(--paper);
+  line-height: 1.55;
+  font-weight: 400;
+  overflow-x: hidden;
+}
+img, svg { display: block; max-width: 100%; height: auto; }
+a { color: inherit; }
+
+.hero {
+  min-height: 100vh;
+  min-height: 100dvh;
+  position: relative;
+  display: grid;
+  align-items: end;
+  background: #0E1A1B center/cover no-repeat;
+  background-image:
+    linear-gradient(105deg, rgba(10,12,10,.78) 0%, rgba(14,18,16,.45) 45%, rgba(10,12,10,.55) 100%),
+    url("assets/renders/cabin-sinichka-hero.png");
+  color: var(--fog);
+  padding: clamp(24px, 4vw, 48px);
+  overflow: hidden;
+}
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.4'/%3E%3C/svg%3E");
+  opacity: .05;
+  pointer-events: none;
+}
+.hero-grain {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 40%, rgba(8,10,8,.55) 100%);
+  pointer-events: none;
+}
+.hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+  padding-bottom: clamp(32px, 8vh, 72px);
+}
+.brand {
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(48px, 9vw, 96px);
+  font-weight: 600;
+  line-height: .95;
+  letter-spacing: -.01em;
+  margin-bottom: 20px;
+  opacity: 0;
+  animation: rise .9s var(--ease) .15s forwards;
+}
+.brand span { display: block; color: var(--amber); }
+.hero h1 {
+  font-family: Outfit, sans-serif;
+  font-weight: 300;
+  font-size: clamp(18px, 2.4vw, 26px);
+  max-width: 28ch;
+  line-height: 1.35;
+  margin-bottom: 14px;
+  opacity: 0;
+  animation: rise .9s var(--ease) .35s forwards;
+}
+.hero p {
+  max-width: 42ch;
+  color: rgba(228,224,216,.72);
+  font-size: 15px;
+  margin-bottom: 28px;
+  opacity: 0;
+  animation: rise .9s var(--ease) .5s forwards;
+}
+.cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  opacity: 0;
+  animation: rise .9s var(--ease) .65s forwards;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 22px;
+  border-radius: 2px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: .04em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: transform .25s var(--ease), background .25s, color .25s;
+}
+.btn-primary { background: var(--amber); color: var(--ink); }
+.btn-primary:hover { transform: translateY(-2px); background: var(--amber-soft); }
+.btn-ghost {
+  border: 1px solid rgba(228,224,216,.35);
+  color: var(--fog);
+}
+.btn-ghost:hover { border-color: var(--amber); color: var(--amber); }
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 clamp(20px, 4vw, 40px);
+}
+section { padding: clamp(56px, 10vh, 100px) 0; }
+.eyebrow {
+  font-size: 11px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--amber);
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+h2 {
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 600;
+  line-height: 1.1;
+  margin-bottom: 14px;
+  max-width: 18ch;
+}
+.lead {
+  color: var(--mute);
+  max-width: 52ch;
+  font-size: 16px;
+  margin-bottom: 36px;
+}
+
+.shots {
+  display: grid;
+  gap: 16px;
+  margin-top: 8px;
+}
+@media (min-width: 800px) {
+  .shots {
+    grid-template-columns: 1.2fr 1fr;
+    grid-template-rows: auto auto;
+  }
+  .shot-wide { grid-column: 1 / -1; }
+}
+.shot { margin: 0; overflow: hidden; background: #1A1512; }
+.shot img {
+  width: 100%;
+  height: auto;
+  display: block;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  transition: transform .6s var(--ease);
+}
+.shot:hover img { transform: scale(1.02); }
+.shot figcaption {
+  font-size: 12px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--mute);
+  padding: 12px 4px 0;
+}
+
+.plan-block {
+  background: #fff;
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+.plan-block img { width: 100%; }
+.note-keep {
+  margin-top: 20px;
+  padding: 16px 20px;
+  background: rgba(31,107,74,.08);
+  border-left: 3px solid #1F6B4A;
+  font-size: 14px;
+  color: #1A3A2C;
+}
+.note-keep strong { color: #1F6B4A; }
+
+.cabin-showcase {
+  display: grid;
+  gap: 28px;
+}
+@media (min-width: 800px) {
+  .cabin-showcase { grid-template-columns: 1.1fr .9fr; align-items: center; }
+}
+.cabin-meta h3 {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+.specs {
+  list-style: none;
+  margin: 20px 0 0;
+  display: grid;
+  gap: 10px;
+}
+.specs li {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 12px;
+  font-size: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+.specs .k {
+  color: var(--mute);
+  font-size: 12px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.units {
+  display: grid;
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+@media (min-width: 720px) {
+  .units { grid-template-columns: repeat(3, 1fr); }
+}
+.unit {
+  background: var(--paper);
+  padding: 28px 24px;
+  transition: background .3s;
+}
+.unit:hover { background: #fff; }
+.unit .n {
+  font-size: 11px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--amber);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.unit h3 {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 26px;
+  margin-bottom: 8px;
+}
+.unit p { font-size: 14px; color: var(--mute); }
+
+.mats { display: grid; gap: 20px; }
+@media (min-width: 700px) {
+  .mats { grid-template-columns: repeat(4, 1fr); }
+}
+.mat { padding-top: 16px; border-top: 2px solid var(--ink); }
+.swatch { height: 48px; margin-bottom: 14px; }
+.mat h3 {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 20px;
+  margin-bottom: 6px;
+}
+.mat p { font-size: 13px; color: var(--mute); }
+
+.exp {
+  background: var(--ink);
+  color: var(--fog);
+  padding: clamp(56px, 10vh, 100px) 0;
+}
+.exp h2 { color: #fff; }
+.exp .lead { color: rgba(228,224,216,.65); }
+.exp-grid {
+  display: grid;
+  gap: 32px;
+  margin-top: 8px;
+}
+@media (min-width: 700px) {
+  .exp-grid { grid-template-columns: repeat(3, 1fr); }
+}
+.exp-item .num {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 42px;
+  color: var(--amber);
+  line-height: 1;
+  margin-bottom: 10px;
+}
+.exp-item h3 {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+.exp-item p { font-size: 14px; color: rgba(228,224,216,.65); }
+
+.fp-wrap {
+  background: #fff;
+  border: 1px solid var(--line);
+  padding: 12px;
+}
+
+.principles { display: grid; gap: 24px; }
+@media (min-width: 700px) {
+  .principles { grid-template-columns: 1fr 1fr; }
+}
+.principle {
+  padding: 24px 0;
+  border-top: 1px solid var(--line);
+}
+.principle h3 {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+.principle p { font-size: 14px; color: var(--mute); }
+
+footer {
+  border-top: 1px solid var(--line);
+  padding: 28px clamp(20px, 4vw, 40px) 48px;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 28px;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--mute);
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity .7s var(--ease), transform .7s var(--ease);
+}
+.reveal.in { opacity: 1; transform: none; }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-grain"></div>
+  <div class="hero-inner">
+    <div class="brand">Красногорские<br><span>бани</span></div>
+    <h1>Срубы у Синички — аренда в архангельском стиле</h1>
+    <p>Двухэтажные бани из северного леса: парная, сон, терраса к воде. Дорого, тихо, по-северному.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="#gallery">Смотреть визуализации</a>
+      <a class="btn btn-ghost" href="#plan">Генплан</a>
+    </div>
+  </div>
+</header>
+
+<section id="gallery" style="padding-top:clamp(40px,6vh,64px);padding-bottom:0">
+  <div class="wrap">
+    <div class="eyebrow reveal">Визуализации</div>
+    <h2 class="reveal">Как это выглядит</h2>
+    <div class="shots reveal">
+      <figure class="shot shot-wide">
+        <img src="assets/renders/cabin-sinichka-hero.png" alt="Двухэтажный сруб у реки — вид с террасы">
+        <figcaption>Сруб у воды · тип «Архангельск»</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="assets/renders/masterplan-sinichka.png" alt="Генплан участка у Синички">
+        <figcaption>Генплан · галочка = не трогаем</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="assets/renders/cabin-interior-lounge.png" alt="Интерьер комнаты отдыха с панорамой на реку">
+        <figcaption>Комната отдыха · панорама на реку</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section id="plan">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow">Территория</div>
+      <h2>Генплан у реки Синичка</h2>
+      <p class="lead">Три приватных сруба вдоль берега и зелени. Существующее здание с галочкой остаётся без изменений — якорная точка участка.</p>
+    </div>
+    <div class="plan-block reveal">
+      <img src="assets/renders/masterplan-sinichka.png" alt="Генплан участка: река Синичка, три новых сруба и сохранённое здание">
+    </div>
+    <div class="plan-block reveal" style="margin-top:16px">
+      <img src="assets/masterplan.svg" alt="Схема генплана с подписями домов">
+    </div>
+    <p class="note-keep reveal"><strong>Не трогаем:</strong> здание, отмеченное галочкой на исходной схеме (южная часть участка). Оно остаётся в текущем виде; новые домики размещаются севернее и ближе к воде.</p>
+  </div>
+</section>
+
+<section id="units" style="padding-top:0">
+  <div class="wrap">
+    <div class="eyebrow reveal">Линейка</div>
+    <h2 class="reveal">Три дома — три характера</h2>
+    <p class="lead reveal">Один архитектурный тип, разные постановки на участке. Все — 2 этажа, сруб, аренда от суток.</p>
+    <div class="units reveal">
+      <article class="unit">
+        <div class="n">01</div>
+        <h3>Синичка</h3>
+        <p>Флагман у самой воды. Терраса и купель с видом на реку. Максимальная приватность и цена.</p>
+      </article>
+      <article class="unit">
+        <div class="n">02</div>
+        <h3>Север</h3>
+        <p>Центральный сруб между рощей и берегом. Вид на парк и дорожку к воде.</p>
+      </article>
+      <article class="unit">
+        <div class="n">03</div>
+        <h3>Роща</h3>
+        <p>У зелёных зон, тише и камернее. Для гостей, кому важнее сад, чем берег.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="tip" style="background:#fff">
+  <div class="wrap cabin-showcase">
+    <div class="reveal">
+      <img src="assets/renders/cabin-sinichka-hero.png" alt="Двухэтажный сруб архангельского типа у реки" style="width:100%;border:1px solid var(--line)">
+      <img src="assets/cabin-elevation.svg" alt="Схема фасада" style="margin-top:16px;width:100%;border:1px solid var(--line);background:#E8E2D8">
+    </div>
+    <div class="cabin-meta reveal">
+      <div class="eyebrow">Архитектура</div>
+      <h3>Тип «Архангельск»</h3>
+      <p class="lead" style="margin-bottom:0">Крупное бревно северной сосны, рубка «в чашу», тёмная кровля, панорама на 1 этаже и балкон на 2-м. Не «дача», а гостиничный стандарт в дереве.</p>
+      <ul class="specs">
+        <li><span class="k">Этажность</span><span>2 этажа + терраса</span></li>
+        <li><span class="k">Площадь</span><span>~95–110 м²</span></li>
+        <li><span class="k">Материал</span><span>Архангельская сосна, зимняя рубка</span></li>
+        <li><span class="k">Гости</span><span>До 6 человек</span></li>
+        <li><span class="k">Парная</span><span>6–8 чел., дровяная / комбинированная</span></li>
+        <li><span class="k">Финиш</span><span>Масло тёмный орех / графит, чёрный металл</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow reveal">Планировка</div>
+    <h2 class="reveal">Ритуал внизу — сон наверху</h2>
+    <p class="lead reveal">Первый этаж — парная, моечная, отдых у панорамы и терраса. Второй — две спальни и лофт с балконом.</p>
+    <div class="fp-wrap reveal">
+      <img src="assets/floorplan.svg" alt="Планировка 1 и 2 этажа банного сруба">
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow reveal">Материалы</div>
+    <h2 class="reveal">Тактильность премиума</h2>
+    <p class="lead reveal">Северный лес, тёмные тона, металл и камень — без «деревенского» китча.</p>
+    <div class="mats reveal">
+      <div class="mat">
+        <div class="swatch" style="background:linear-gradient(135deg,#6B3F1F,#3D2618)"></div>
+        <h3>Сруб</h3>
+        <p>Архангельская сосна Ø280–320 мм, рубка в чашу, масло «тёмный орех».</p>
+      </div>
+      <div class="mat">
+        <div class="swatch" style="background:linear-gradient(135deg,#2A221A,#0E0C0A)"></div>
+        <h3>Кровля</h3>
+        <p>Фальц или мягкая черепица графит — строгий силуэт на фоне реки.</p>
+      </div>
+      <div class="mat">
+        <div class="swatch" style="background:linear-gradient(135deg,#A8C4C8,#4A6A70)"></div>
+        <h3>Остекление</h3>
+        <p>Тёплый алюминий / дерево, крупные створки к воде и саду.</p>
+      </div>
+      <div class="mat">
+        <div class="swatch" style="background:linear-gradient(135deg,#C9A96E,#8A6E3C)"></div>
+        <h3>Детали</h3>
+        <p>Латунь и чёрный металл в ограждениях, светильники, фурнитура.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="exp">
+  <div class="wrap">
+    <div class="eyebrow reveal">Опыт гостя</div>
+    <h2 class="reveal">Как продаём ощущение</h2>
+    <p class="lead reveal">Не «домик с баней», а ночь у реки в собственном срубе бренда Красногорские бани.</p>
+    <div class="exp-grid">
+      <div class="exp-item reveal">
+        <div class="num">01</div>
+        <h3>Приезд</h3>
+        <p>Отдельный въезд, прогретая парная, дрова уложены, свет приглушён. Ключ — цифровой.</p>
+      </div>
+      <div class="exp-item reveal">
+        <div class="num">02</div>
+        <h3>Ритуал</h3>
+        <p>Парная → купель / река → отдых у камина. Набор для веников и чайный стол включены.</p>
+      </div>
+      <div class="exp-item reveal">
+        <div class="num">03</div>
+        <h3>Ночь</h3>
+        <p>Сон на втором этаже, утро с видом на Синичку. Завтрак — опция с ресторана комплекса.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow reveal">Правила участка</div>
+    <h2 class="reveal">Что сохраняем и куда ставим</h2>
+    <div class="principles">
+      <div class="principle reveal">
+        <h3>Здание с галочкой — вне работ</h3>
+        <p>Южная постройка на схеме остаётся. Новые срубы не примыкают к ней и не перекрывают подъезд.</p>
+      </div>
+      <div class="principle reveal">
+        <h3>Фасады к воде</h3>
+        <p>Главные остеклённые плоскости и террасы ориентированы на Синичку — это лицо продукта.</p>
+      </div>
+      <div class="principle reveal">
+        <h3>Дистанции и приватность</h3>
+        <p>Между срубами — зелень и дорожки; окна спален не смотрят друг в друга.</p>
+      </div>
+      <div class="principle reveal">
+        <h3>Стиль дороже «избы»</h3>
+        <p>Тёмное масло, минимум резьбы, чистые линии, гостиничный интерьер — архангельский сруб в премиум-прочтении.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>Красногорские бани · концепция срубов в аренду · р. Синичка</span>
+  <span>Июль 2026 · для внутреннего согласования</span>
+</footer>
+
+<script>
+const io = new IntersectionObserver((entries) => {
+  entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+</script>
+</body>
+</html>
