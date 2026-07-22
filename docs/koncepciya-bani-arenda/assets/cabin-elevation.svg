@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 480" role="img" aria-labelledby="elTitle">
-  <title id="elTitle">$0A04 42CEMB06=>3> A@C10 � 0@E0=35;LA:89 B8?</title>
+  <title id="elTitle">Фасад двухэтажного сруба · архангельский тип</title>
   <defs>
     <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%" stop-color="#C5D4D6"/>
@@ -20,19 +20,13 @@
       <stop offset="100%" stop-color="#6A8A90" stop-opacity=".7"/>
     </linearGradient>
   </defs>
-
   <rect width="720" height="480" fill="url(#sky)"/>
-
-  <!-- Ground -->
   <ellipse cx="360" cy="430" rx="280" ry="28" fill="#3A4A38" opacity=".25"/>
   <rect y="420" width="720" height="60" fill="#4A5640"/>
   <rect y="420" width="720" height="8" fill="#3A4434"/>
-
-  <!-- Side wing / terrace roof -->
   <g transform="translate(520,250)">
     <polygon points="0,40 90,10 90,100 0,100" fill="#3A2818"/>
     <rect x="8" y="48" width="74" height="52" fill="url(#log)"/>
-    <!-- log lines -->
     <g stroke="#3A2010" stroke-width=".8" opacity=".45">
       <line x1="8" y1="58" x2="82" y2="58"/>
       <line x1="8" y1="68" x2="82" y2="68"/>
@@ -41,21 +35,12 @@
     </g>
     <rect x="28" y="60" width="34" height="40" fill="url(#glass)" stroke="#1A1410" stroke-width="1.5"/>
   </g>
-
-  <!-- Main body -->
   <g transform="translate(160,120)">
-    <!-- Roof -->
     <polygon points="0,110 180,-10 360,110" fill="url(#roof)"/>
     <polygon points="-12,110 180,-22 372,110" fill="none" stroke="#D4A574" stroke-width="2" opacity=".4"/>
-    <!-- Ridge detail -->
     <line x1="180" y1="-10" x2="180" y2="110" stroke="#1A1410" stroke-width="1" opacity=".3"/>
-    <!-- Gable end logs -->
     <path d="M20,110 L180,8 L340,110" fill="none" stroke="#5C3A22" stroke-width="14" stroke-linejoin="round" opacity=".35"/>
-
-    <!-- Walls -->
     <rect x="40" y="110" width="280" height="210" fill="url(#log)"/>
-
-    <!-- Horizontal log courses -->
     <g stroke="#2A1810" stroke-width="1.2" opacity=".35">
       <line x1="40" y1="128" x2="320" y2="128"/>
       <line x1="40" y1="146" x2="320" y2="146"/>
@@ -69,8 +54,6 @@
       <line x1="40" y1="290" x2="320" y2="290"/>
       <line x1="40" y1="308" x2="320" y2="308"/>
     </g>
-
-    <!-- Corner cups (2 G0HC) -->
     <g fill="#4A2A14" stroke="#2A1810" stroke-width=".8">
       <ellipse cx="40" cy="128" rx="10" ry="7"/>
       <ellipse cx="40" cy="164" rx="10" ry="7"/>
@@ -85,16 +68,12 @@
       <ellipse cx="320" cy="272" rx="10" ry="7"/>
       <ellipse cx="320" cy="308" rx="10" ry="7"/>
     </g>
-
-    <!-- Upper floor windows -->
     <rect x="70" y="140" width="50" height="58" rx="2" fill="url(#glass)" stroke="#1A1410" stroke-width="2"/>
     <rect x="155" y="140" width="50" height="58" rx="2" fill="url(#glass)" stroke="#1A1410" stroke-width="2"/>
     <rect x="240" y="140" width="50" height="58" rx="2" fill="url(#glass)" stroke="#1A1410" stroke-width="2"/>
     <line x1="95" y1="140" x2="95" y2="198" stroke="#1A1410" stroke-width="1.5" opacity=".5"/>
     <line x1="180" y1="140" x2="180" y2="198" stroke="#1A1410" stroke-width="1.5" opacity=".5"/>
     <line x1="265" y1="140" x2="265" y2="198" stroke="#1A1410" stroke-width="1.5" opacity=".5"/>
-
-    <!-- Balcony -->
     <rect x="60" y="198" width="240" height="8" fill="#2A221A"/>
     <g stroke="#D4A574" stroke-width="1.5" opacity=".7">
       <line x1="70" y1="198" x2="70" y2="188"/>
@@ -107,21 +86,13 @@
       <line x1="280" y1="198" x2="280" y2="188"/>
       <line x1="70" y1="188" x2="280" y2="188"/>
     </g>
-
-    <!-- Ground floor: panoramic opening -->
     <rect x="70" y="230" width="130" height="90" rx="2" fill="url(#glass)" stroke="#1A1410" stroke-width="2.5"/>
     <line x1="135" y1="230" x2="135" y2="320" stroke="#1A1410" stroke-width="1.5" opacity=".4"/>
     <line x1="70" y1="275" x2="200" y2="275" stroke="#1A1410" stroke-width="1" opacity=".35"/>
-
-    <!-- Door -->
     <rect x="230" y="250" width="48" height="70" rx="1" fill="#2A1810" stroke="#1A1410" stroke-width="2"/>
     <circle cx="268" cy="288" r="2.5" fill="#D4A574"/>
-
-    <!-- Small window near door -->
     <rect x="290" y="255" width="22" height="28" rx="1" fill="url(#glass)" stroke="#1A1410" stroke-width="1.5"/>
   </g>
-
-  <!-- Terrace deck -->
   <rect x="140" y="400" width="360" height="14" rx="1" fill="#5C3A22"/>
   <g stroke="#3A2010" stroke-width="1" opacity=".4">
     <line x1="160" y1="400" x2="160" y2="414"/>
@@ -136,11 +107,7 @@
     <line x1="430" y1="400" x2="430" y2="414"/>
     <line x1="460" y1="400" x2="460" y2="414"/>
   </g>
-
-  <!-- Chimney -->
   <rect x="420" y="95" width="22" height="70" fill="#3A3228"/>
   <rect x="414" y="90" width="34" height="10" fill="#2A221A"/>
-
-  <!-- Labels -->
-  <text x="360" y="455" text-anchor="middle" fill="#E8E2D8" font-family="Georgia,serif" font-size="14" letter-spacing="1">"8? �@E0=35;LA:� � A@C1 � 2 MB060 � ~95110 <�</text>
+  <text x="360" y="455" text-anchor="middle" fill="#E8E2D8" font-family="Georgia,serif" font-size="14" letter-spacing="1">Тип «Архангельск» · сруб · 2 этажа · ~95–110 м²</text>
 </svg>
