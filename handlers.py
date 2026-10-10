@@ -398,7 +398,10 @@ async def cmd_start(message: Message, state: FSMContext, command: CommandObject)
     first, row = store.mark_start(user_id, command.args)
     text = WELCOME + "\n\n" + host_brief(now_msk())
     await show_welcome_video(message, with_notes(text, notes), welcome_keyboard())
-    await message.answer("Клавиатура снизу — если нужно полистать залы.", reply_markup=main_keyboard())
+    await message.answer(
+        "Снизу кнопки: зайти сегодня, женский и мужской разряды.",
+        reply_markup=main_keyboard(),
+    )
     await notify_start(message, row, first)
 
 
