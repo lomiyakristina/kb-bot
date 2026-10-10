@@ -29,8 +29,10 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(BASE_DIR, "..", ".."))
 TOKEN_FILE = os.path.join(ROOT, "vault", "telegram.txt")
 FAQ_FILE = os.path.join(BASE_DIR, "faq.json")
-OWNER_FILE = os.path.join(BASE_DIR, "owner_chat_id.txt")
-LEADS_FILE = os.path.join(BASE_DIR, "leads.log")
+# On Amvera keep mutable files in persistent /data so restarts don't wipe them.
+DATA_DIR = "/data" if os.environ.get("AMVERA") == "1" else BASE_DIR
+OWNER_FILE = os.path.join(DATA_DIR, "owner_chat_id.txt")
+LEADS_FILE = os.path.join(DATA_DIR, "leads.log")
 
 PHONE_RE = re.compile(r"(\+?\d[\d\-\s()]{6,}\d)")
 LEAD_WORDS = ("хочу", "открыт", "запиш", "контакт", "телефон", "звон", "перезвон", "связ")

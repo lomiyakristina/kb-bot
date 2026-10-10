@@ -1,0 +1,11 @@
+# Secrets and local runtime
+vault/
+owner_chat_id.txt
+leads.log
+.env
+.env.*
+*.session
+*.session-journal
+__pycache__/
+.venv/
+venv/
