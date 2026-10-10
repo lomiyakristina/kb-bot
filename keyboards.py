@@ -49,13 +49,12 @@ def hall_keyboard(hall: str) -> InlineKeyboardMarkup:
         for key in HALLS
         if key != hall
     ]
-    return InlineKeyboardMarkup(
-        inline_keyboard=[
-            [InlineKeyboardButton(text="Забронировать этот разряд", callback_data=f"book:{hall}")],
-            others,
-            [InlineKeyboardButton(text="Скоро откроется", callback_data="spaces")],
-        ]
-    )
+    rows = []
+    if hall != "female":
+        rows.append([InlineKeyboardButton(text="Забронировать этот разряд", callback_data=f"book:{hall}")])
+    rows.append(others)
+    rows.append([InlineKeyboardButton(text="Скоро откроется", callback_data="spaces")])
+    return InlineKeyboardMarkup(inline_keyboard=rows)
 
 
 def spaces_keyboard() -> InlineKeyboardMarkup:
@@ -71,7 +70,7 @@ def section_nav() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
         inline_keyboard=[
             [InlineKeyboardButton(text="Позвонить", callback_data="call:now")],
-            [InlineKeyboardButton(text="Вернуться в основное меню", callback_data="menu:home")],
+            [InlineKeyboardButton(text="Вернуться назад", callback_data="menu:home")],
         ]
     )
 
@@ -79,14 +78,14 @@ def section_nav() -> InlineKeyboardMarkup:
 def with_nav(markup: InlineKeyboardMarkup) -> InlineKeyboardMarkup:
     rows = [list(row) for row in markup.inline_keyboard]
     rows.append([InlineKeyboardButton(text="Позвонить", callback_data="call:now")])
-    rows.append([InlineKeyboardButton(text="Вернуться в основное меню", callback_data="menu:home")])
+    rows.append([InlineKeyboardButton(text="Вернуться назад", callback_data="menu:home")])
     return InlineKeyboardMarkup(inline_keyboard=rows)
 
 
 def home_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
         inline_keyboard=[
-            [InlineKeyboardButton(text="Вернуться в основное меню", callback_data="menu:home")],
+            [InlineKeyboardButton(text="Вернуться назад", callback_data="menu:home")],
         ]
     )
 
