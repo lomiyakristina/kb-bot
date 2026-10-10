@@ -1,13 +1,10 @@
-/* Полное меню «Красногорские бани» — данные со сканов */
+/* Полное меню «Красногорские бани» — печатный формат для Instagram */
 window.KB_MENU = {
   brand: "Красногорские бани",
   phone: "8-925-105-77-77",
-  phoneHref: "tel:+79251057777",
   site: "krasnogorskie-bani.ru",
   address: "Москворецкий бульвар 2А",
   hours: "ежедневно 9:00–23:00",
-  telegram: "https://t.me/krasnogorskie_bani",
-  whatsapp: "https://wa.me/79251057777",
   slides: [
     {
       id: "cover",
@@ -15,13 +12,13 @@ window.KB_MENU = {
       kicker: "Ресторан · Бар",
       title: "Меню",
       subtitle: "Авторская кухня и напитки\nв банном комплексе",
-      tags: ["Салаты", "Горячее", "Мангал", "Бар"]
+      categories: "Салаты · Горячее · Мангал · Бар"
     },
     {
       id: "salads",
       type: "menu",
-      title: "Салаты",
-      note: "Салаты · Супы · Закуски",
+      pageTitle: "Меню",
+      categories: "Салаты · Супы · Закуски",
       sections: [
         {
           name: "Салаты",
@@ -45,8 +42,8 @@ window.KB_MENU = {
     {
       id: "soups",
       type: "menu",
-      title: "Супы",
-      note: "Салаты · Супы · Закуски",
+      pageTitle: "Меню",
+      categories: "Салаты · Супы · Закуски",
       sections: [
         {
           name: "Супы",
@@ -63,8 +60,8 @@ window.KB_MENU = {
     {
       id: "zakuski-1",
       type: "menu",
-      title: "Закуски",
-      note: "Часть 1",
+      pageTitle: "Меню",
+      categories: "Салаты · Супы · Закуски",
       sections: [
         {
           name: "Закуски",
@@ -88,8 +85,8 @@ window.KB_MENU = {
     {
       id: "zakuski-2",
       type: "menu",
-      title: "Закуски",
-      note: "Часть 2",
+      pageTitle: "Меню",
+      categories: "Салаты · Супы · Закуски",
       sections: [
         {
           name: "Закуски",
@@ -108,8 +105,8 @@ window.KB_MENU = {
     {
       id: "meat",
       type: "menu",
-      title: "Горячее",
-      note: "Мясо и птица",
+      pageTitle: "Меню",
+      categories: "Салаты · Горячее · Мангал",
       sections: [
         {
           name: "Горячее из мяса и птицы",
@@ -129,10 +126,10 @@ window.KB_MENU = {
       ]
     },
     {
-      id: "grill-fish",
+      id: "grill",
       type: "menu",
-      title: "Мангал · Рыба",
-      note: "Гриль и морепродукты",
+      pageTitle: "Меню",
+      categories: "Горячее · Мангал · Рыба",
       sections: [
         {
           name: "Мангал",
@@ -143,7 +140,15 @@ window.KB_MENU = {
             { name: "Шашлык из баранины, задок мякоть", price: "2 100" },
             { name: "Люля-кебаб из баранины", price: "1 470" }
           ]
-        },
+        }
+      ]
+    },
+    {
+      id: "fish",
+      type: "menu",
+      pageTitle: "Меню",
+      categories: "Горячее · Мангал · Рыба",
+      sections: [
         {
           name: "Горячее из рыбы и морепродуктов",
           items: [
@@ -158,15 +163,7 @@ window.KB_MENU = {
             { name: "Стейк из лосося с медово-кориандровым соусом", price: "1 700" },
             { name: "Камбала с чесночным маслом и микрозеленью", price: "870" }
           ]
-        }
-      ]
-    },
-    {
-      id: "sides-breakfast",
-      type: "menu",
-      title: "Гарниры · Завтраки",
-      note: "Гарниры · Завтраки с 9 до 12",
-      sections: [
+        },
         {
           name: "Гарниры",
           items: [
@@ -176,7 +173,15 @@ window.KB_MENU = {
             { name: "Картофельное пюре", price: "325" },
             { name: "Шпинат с пармезаном и кедровым орехом", price: "450" }
           ]
-        },
+        }
+      ]
+    },
+    {
+      id: "breakfast",
+      type: "menu",
+      pageTitle: "Меню",
+      categories: "Завтраки · Десерты · Детское · Пицца",
+      sections: [
         {
           name: "Завтраки с 9 до 12",
           items: [
@@ -197,10 +202,10 @@ window.KB_MENU = {
       ]
     },
     {
-      id: "desserts-kids-pizza",
+      id: "desserts-kids",
       type: "menu",
-      title: "Десерты · Детское · Пицца",
-      note: "Сладкое и для детей",
+      pageTitle: "Меню",
+      categories: "Завтраки · Десерты · Детское · Пицца",
       sections: [
         {
           name: "Десерты",
@@ -220,7 +225,15 @@ window.KB_MENU = {
             { name: "Куриные котлеты с пюре и кетчупом", price: "600" },
             { name: "Макароны с сыром", price: "350" }
           ]
-        },
+        }
+      ]
+    },
+    {
+      id: "pizza",
+      type: "menu",
+      pageTitle: "Меню",
+      categories: "Завтраки · Десерты · Детское · Пицца",
+      sections: [
         {
           name: "Пицца",
           items: [
@@ -235,10 +248,10 @@ window.KB_MENU = {
       ]
     },
     {
-      id: "bar-soft",
+      id: "bar-banshik-tea",
       type: "menu",
-      title: "Бар",
-      note: "Напиток банщика · Чай · Кофе · Вода",
+      pageTitle: "Бар",
+      categories: "Напиток банщика · Чай · Кофе · Вода",
       sections: [
         {
           name: "Напиток банщика",
@@ -263,7 +276,15 @@ window.KB_MENU = {
             { name: "Мыс целебных трав", price: "700" },
             { name: "Лимон", desc: "1 порция", price: "100" }
           ]
-        },
+        }
+      ]
+    },
+    {
+      id: "bar-coffee-water",
+      type: "menu",
+      pageTitle: "Бар",
+      categories: "Напиток банщика · Чай · Кофе · Вода",
+      sections: [
         {
           name: "Авторский чай · 1 л",
           items: [
@@ -288,15 +309,7 @@ window.KB_MENU = {
             { name: "Боржоми", desc: "0,5 л", price: "450" },
             { name: "Рычал-Су", desc: "0,5 л", price: "400" }
           ]
-        }
-      ]
-    },
-    {
-      id: "bar-drinks",
-      type: "menu",
-      title: "Бар",
-      note: "Квас · Сок · Б/а · Пиво · Мёд",
-      sections: [
+        },
         {
           name: "Квас и морс",
           items: [
@@ -304,7 +317,15 @@ window.KB_MENU = {
             { name: "Квас светлый", desc: "0,5 л", price: "450" },
             { name: "Морс", desc: "0,5 л", price: "400" }
           ]
-        },
+        }
+      ]
+    },
+    {
+      id: "bar-soft-beer",
+      type: "menu",
+      pageTitle: "Бар",
+      categories: "Квас · Сок · Б/а · Пиво · Мёд",
+      sections: [
         {
           name: "Сок",
           items: [
@@ -322,6 +343,14 @@ window.KB_MENU = {
           ]
         },
         {
+          name: "Мёд",
+          items: [
+            { name: "Мёд цветочный", desc: "100 мл", price: "500" },
+            { name: "Мёд с кедровым орехом", desc: "100 мл", price: "600" },
+            { name: "Крем-мёд", desc: "100 мл", price: "500" }
+          ]
+        },
+        {
           name: "Пиво",
           items: [
             { name: "Крушовице б/а", desc: "0,33 л", price: "350" },
@@ -335,25 +364,17 @@ window.KB_MENU = {
             { name: "Перони", desc: "0,33 л", price: "550" },
             { name: "Лаки Будда", desc: "0,33 л", price: "550" }
           ]
-        },
-        {
-          name: "Мёд",
-          items: [
-            { name: "Мёд цветочный", desc: "100 мл", price: "500" },
-            { name: "Мёд с кедровым орехом", desc: "100 мл", price: "600" },
-            { name: "Крем-мёд", desc: "100 мл", price: "500" }
-          ]
         }
       ]
     },
     {
-      id: "bar-alcohol",
+      id: "bar-cocktails",
       type: "menu",
-      title: "Бар",
-      note: "Коктейли · Крепкое",
+      pageTitle: "Бар",
+      categories: "Коктейли · Крепкое · Вино",
       sections: [
         {
-          name: "Коктейли · 1 200 ₽",
+          name: "Коктейли",
           items: [
             { name: "Вингер", desc: "220 мл · джин, яблочный сок, маракуйя, лимон, мята", price: "1 200" },
             { name: "Виски сауэр", desc: "180 мл · виски, лимон, белок, грушевый сироп", price: "1 200" },
@@ -378,7 +399,15 @@ window.KB_MENU = {
             { name: "Чистые росы", price: "550" },
             { name: "Зёрна Севера", price: "350" }
           ]
-        },
+        }
+      ]
+    },
+    {
+      id: "bar-spirits",
+      type: "menu",
+      pageTitle: "Бар",
+      categories: "Коктейли · Крепкое · Вино",
+      sections: [
         {
           name: "Виски · 50 мл",
           items: [
@@ -390,15 +419,7 @@ window.KB_MENU = {
             { name: "Манки Шолдер солодовый", price: "800" },
             { name: "Балвэни Дабл Вуд 12 лет", price: "1 750" }
           ]
-        }
-      ]
-    },
-    {
-      id: "bar-spirits-wine",
-      type: "menu",
-      title: "Бар",
-      note: "Крепкое · Вино",
-      sections: [
+        },
         {
           name: "Джин · Текила · Коньяк · Ром · 50 мл",
           items: [
@@ -414,7 +435,15 @@ window.KB_MENU = {
             { name: "Барбадийо Фино", desc: "херес · 100 мл", price: "650" },
             { name: "Кокрель VSOP, 4 года", desc: "кальвадос", price: "950" }
           ]
-        },
+        }
+      ]
+    },
+    {
+      id: "bar-wine",
+      type: "menu",
+      pageTitle: "Бар",
+      categories: "Коктейли · Крепкое · Вино",
+      sections: [
         {
           name: "Вино белое · 0,75 л",
           items: [
@@ -435,8 +464,10 @@ window.KB_MENU = {
         {
           name: "Игристое б/а · 0,75 л",
           items: [
-            { name: "Альтернатива Экстра Драй / Розе Экстра Драй", price: "4 000" },
-            { name: "Альтернатива Белое Драй / Розе Драй", price: "4 000" }
+            { name: "Альтернатива Экстра Драй", price: "4 000" },
+            { name: "Альтернатива Розе Экстра Драй", price: "4 000" },
+            { name: "Альтернатива Белое Драй", price: "4 000" },
+            { name: "Альтернатива Розе Драй", price: "4 000" }
           ]
         },
         {
@@ -455,7 +486,7 @@ window.KB_MENU = {
       id: "cta",
       type: "cta",
       title: "Ждём вас",
-      subtitle: "Забронируйте стол или спросите\nактуальное меню у администратора",
+      subtitle: "Забронируйте стол или уточните\nактуальное меню у администратора",
       facts: [
         { label: "Адрес", value: "Москворецкий бульвар 2А" },
         { label: "Телефон", value: "8-925-105-77-77" },
