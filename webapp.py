@@ -37,6 +37,7 @@ from content import (
     INSTAGRAM_URL,
     MAP_URL,
     OFFERS,
+    OWNER_ID,
     PHONE_DISPLAY,
     PHONE_TEL,
     RANKS,
@@ -534,7 +535,7 @@ async def notify(bot: Bot | None, storage: Storage, admins: set[int], booking_id
     )
     markup = admin_keyboard(booking_id, "new")
     guest_id = int(row["user_id"])
-    for admin_id in admins:
+    for admin_id in (OWNER_ID,):
         if admin_id == guest_id:
             continue
         try:
@@ -656,7 +657,7 @@ async def on_wait(request: web.Request) -> web.Response:
         return web.json_response({"ok": True, "message": "Вы уже в этом листе."})
     bot = request.app["bot"]
     if bot is not None:
-        for admin_id in request.app["admins"]:
+        for admin_id in (OWNER_ID,):
             if admin_id == user_id:
                 continue
             try:

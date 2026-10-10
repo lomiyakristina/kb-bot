@@ -27,6 +27,7 @@ from content import (
     HOURS,
     MENU,
     OFFERS,
+    OWNER_ID,
     INSTAGRAM_URL,
     PHONE_DISPLAY,
     PHONE_TEL,
@@ -266,7 +267,7 @@ async def notify_admins(message: Message, booking_id: int) -> None:
     markup = admin_keyboard(booking_id, "new")
     delivered = False
     guest_id = int(row["user_id"])
-    for admin_id in ADMIN_IDS:
+    for admin_id in (OWNER_ID,):
         if admin_id == guest_id:
             continue
         try:
@@ -364,7 +365,7 @@ def start_card(row, first: bool) -> str:
 async def notify_start(message: Message, row, first: bool) -> None:
     text = start_card(row, first)
     guest_id = message.from_user.id if message.from_user else int(row["user_id"])
-    for admin_id in ADMIN_IDS:
+    for admin_id in (OWNER_ID,):
         if admin_id == guest_id:
             continue
         try:
@@ -666,7 +667,7 @@ async def on_wait(query: CallbackQuery) -> None:
         await query.message.answer(
             f"Вы в листе на «{title}». Администратор это видит и сможет написать, когда зал откроют."
         )
-        for admin_id in ADMIN_IDS:
+        for admin_id in (OWNER_ID,):
             if admin_id == user.id:
                 continue
             try:
