@@ -2,9 +2,11 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-# Копируем только мозги бота — vault и секреты НЕ попадают в образ.
-# Токен и chat_id задаются переменными окружения TELEGRAM_TOKEN и OWNER_CHAT_ID.
-COPY bot.py /app/bot.py
-COPY faq.json /app/faq.json
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-CMD ["python", "bot.py", "run"]
+COPY main.py handlers.py keyboards.py content.py logic.py storage.py ./
+COPY photos ./photos
+RUN mkdir -p /app/data
+
+CMD ["python", "main.py"]
