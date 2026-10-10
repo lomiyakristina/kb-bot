@@ -36,6 +36,7 @@ from content import (
     RESTAURANT_PHOTOS,
     RITUALS,
     SPA,
+    SPA_PHOTOS,
     STEAM_TIMES,
     TELEGRAM_URL,
     TARIFFS,
@@ -612,7 +613,7 @@ async def on_menu(message: Message, state: FSMContext) -> None:
         notes = store.note_schedule(user_id, now_msk().date().isoformat())
         await message.answer(with_notes(schedule_text(), notes), reply_markup=section_nav())
     elif text == MENU["spa"]:
-        await message.answer(SPA, reply_markup=section_nav())
+        await show_album(message, SPA_PHOTOS, SPA)
     elif text == MENU["nearest"]:
         await message.answer(host_brief(now_msk()) + "\n\nКакой разряд?", reply_markup=nearest_halls_keyboard())
     elif text == MENU["book"]:
@@ -713,7 +714,7 @@ async def on_more(query: CallbackQuery, state: FSMContext) -> None:
         notes = store.note_schedule(user_id, now_msk().date().isoformat())
         await query.message.answer(with_notes(schedule_text(), notes), reply_markup=section_nav())
     elif key == "spa":
-        await query.message.answer(SPA, reply_markup=section_nav())
+        await show_album(query.message, SPA_PHOTOS, SPA)
     elif key == "gift":
         await query.message.answer("Сертификат на сумму из прайса. Администратор подготовит.", reply_markup=certificate_keyboard())
     elif key == "contacts":
