@@ -1,0 +1,11 @@
+{
+  "name": "kb-instagram-menu",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "export": "node export.mjs"
+  },
+  "dependencies": {
+    "ws": "^8.22.0"
+  }
+}

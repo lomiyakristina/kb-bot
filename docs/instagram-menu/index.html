@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Меню · Instagram · Красногорские бани</title>
+<style>
+  @font-face {
+    font-family: "Cormorant Garamond";
+    src: url("fonts/CormorantGaramond.ttf") format("truetype");
+    font-weight: 300 700;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "Cormorant Garamond";
+    src: url("fonts/CormorantGaramond-Italic.ttf") format("truetype");
+    font-weight: 300 700;
+    font-style: italic;
+    font-display: swap;
+  }
+
+  :root {
+    --bg: #f7f2ea;
+    --ink: #1c1712;
+    --muted: #6e6458;
+    --gold: #a9844a;
+    --line: rgba(28, 23, 18, 0.16);
+    --dot: rgba(28, 23, 18, 0.32);
+    --slide-w: 1080px;
+    --slide-h: 1350px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-weight: 400;
+    background: #1c1814;
+    color: var(--ink);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page-head {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 40px 24px 20px;
+    color: #efe6d8;
+    text-align: center;
+  }
+  .page-head h1 {
+    font-weight: 500;
+    font-size: 30px;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .page-head p {
+    color: rgba(239, 230, 216, 0.7);
+    font-size: 17px;
+    line-height: 1.55;
+  }
+  .page-head a { color: #d2b07a; }
+
+  .deck {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 48px;
+    padding: 24px 16px 80px;
+  }
+  .slide-wrap { width: min(100%, 540px); }
+  .slide-cap {
+    font-size: 13px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(239, 230, 216, 0.4);
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  .slide {
+    width: var(--slide-w);
+    height: var(--slide-h);
+    position: relative;
+    overflow: hidden;
+    background: var(--bg);
+    color: var(--ink);
+    transform-origin: top left;
+  }
+
+  @media (max-width: 1120px) {
+    .slide-wrap { width: min(100%, 405px); }
+    .slide { transform: scale(0.375); margin-bottom: calc(var(--slide-h) * -0.625); }
+  }
+  @media (min-width: 1121px) {
+    .slide-wrap { width: 540px; }
+    .slide { transform: scale(0.5); margin-bottom: calc(var(--slide-h) * -0.5); }
+  }
+
+  body.export {
+    background: var(--bg);
+    margin: 0;
+    overflow: hidden;
+  }
+  body.export .page-head,
+  body.export .slide-cap { display: none; }
+  body.export .deck { gap: 0; padding: 0; align-items: flex-start; }
+  body.export .slide-wrap:not(:has(.export-target)) { display: none; }
+  body.export .slide-wrap { width: var(--slide-w); height: var(--slide-h); }
+  body.export .slide { transform: none !important; margin: 0 !important; }
+  body.export .slide:not(.export-target) { display: none; }
+  body.export .slide.export-target {
+    display: block;
+    position: fixed;
+    inset: 0;
+  }
+
+  .slide-inner {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    padding: 72px 80px 64px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Header like printed menu ── */
+  .topbar {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 32px;
+    margin-bottom: 40px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--line);
+  }
+  .brand {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .logo-mark {
+    width: 72px;
+    height: auto;
+    display: block;
+  }
+  .brand-name {
+    font-size: 16px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.35;
+  }
+  .head-right { text-align: right; }
+  .page-title {
+    font-size: 68px;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: 0.01em;
+  }
+  .page-cats {
+    margin-top: 12px;
+    font-size: 17px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  .content {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+  }
+
+  .section-name {
+    font-size: 19px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin-bottom: 18px;
+  }
+  .items {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .item-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 14px;
+    align-items: end;
+  }
+  .item-name {
+    font-size: 27px;
+    font-weight: 500;
+    line-height: 1.22;
+    position: relative;
+  }
+  /* dotted leader */
+  .item-row.has-price .item-name {
+    background-image: radial-gradient(circle, var(--dot) 1px, transparent 1.2px);
+    background-position: 0 1.05em;
+    background-size: 7px 3px;
+    background-repeat: repeat-x;
+  }
+  .item-row.has-price .item-name > span {
+    background: var(--bg);
+    padding-right: 8px;
+  }
+  .item-price {
+    font-size: 27px;
+    font-weight: 500;
+    white-space: nowrap;
+    background: var(--bg);
+    padding-left: 6px;
+  }
+  .item-price::after {
+    content: " ₽";
+    font-size: 0.85em;
+  }
+  .item-desc {
+    margin-top: 4px;
+    font-size: 18px;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--muted);
+    line-height: 1.35;
+  }
+  .variants {
+    margin-top: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding-left: 18px;
+  }
+  .variant {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 12px;
+    align-items: end;
+    font-size: 22px;
+    font-weight: 400;
+  }
+  .variant-name {
+    color: var(--muted);
+    background-image: radial-gradient(circle, var(--dot) 1px, transparent 1.2px);
+    background-position: 0 1em;
+    background-size: 7px 3px;
+    background-repeat: repeat-x;
+  }
+  .variant-name > span {
+    background: var(--bg);
+    padding-right: 8px;
+  }
+  .variant-price {
+    white-space: nowrap;
+    background: var(--bg);
+    padding-left: 6px;
+  }
+  .variant-price::after { content: " ₽"; font-size: 0.85em; }
+
+  .cols-2 .content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px 56px;
+    align-content: start;
+  }
+
+  .footer {
+    margin-top: auto;
+    padding-top: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+  .footer .num { color: var(--ink); font-weight: 400; }
+
+  /* Cover */
+  .cover .slide-inner {
+    align-items: stretch;
+    justify-content: space-between;
+    padding: 90px 96px 88px;
+  }
+  .cover-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .cover .logo-mark { width: 88px; }
+  .cover .brand-name { font-size: 16px; }
+  .cover-center {
+    text-align: center;
+    padding: 40px 0 60px;
+  }
+  .cover .kicker {
+    font-size: 18px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 500;
+  }
+  .cover .big {
+    font-size: 128px;
+    font-weight: 500;
+    line-height: 0.95;
+    margin: 28px 0 22px;
+  }
+  .cover .sub {
+    font-size: 28px;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.4;
+    color: var(--muted);
+    white-space: pre-line;
+  }
+  .cover .cats {
+    margin-top: 48px;
+    font-size: 18px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .cover-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--line);
+    padding-top: 24px;
+    font-size: 20px;
+    color: var(--muted);
+  }
+  .cover-bottom span:last-child { color: var(--gold); }
+
+  /* CTA */
+  .cta .slide-inner {
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    padding: 100px 96px;
+  }
+  .cta .logo-mark { width: 88px; margin: 0 auto 16px; }
+  .cta .brand-name {
+    margin-bottom: 48px;
+    text-align: center;
+    width: 100%;
+  }
+  .cta .big {
+    font-size: 78px;
+    font-weight: 500;
+    margin-bottom: 18px;
+  }
+  .cta .sub {
+    font-size: 26px;
+    font-style: italic;
+    color: var(--muted);
+    white-space: pre-line;
+    line-height: 1.4;
+    margin-bottom: 56px;
+  }
+  .facts {
+    width: 100%;
+    max-width: 720px;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+  }
+  .fact {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    gap: 18px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .fact-label {
+    font-size: 16px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+    padding-top: 8px;
+  }
+  .fact-value {
+    font-size: 30px;
+    font-weight: 400;
+  }
+  .cta .links {
+    margin-top: 48px;
+    font-size: 20px;
+    color: var(--muted);
+  }
+  .cta .links em {
+    font-style: normal;
+    color: var(--gold);
+  }
+</style>
+</head>
+<body>
+  <header class="page-head">
+    <h1>Меню для Instagram</h1>
+    <p>
+      Печатный стиль · карусель 1080×1350.
+      PNG: <code>npm run export</code>.
+    </p>
+  </header>
+
+  <div class="deck" id="deck"></div>
+
+  <script src="menu-data.js"></script>
+  <script src="_export-boot.js"></script>
+  <script>
+    const deck = document.getElementById("deck");
+    const slides = window.KB_MENU.slides;
+    const total = slides.length;
+
+    function itemHTML(item) {
+      let html = `<div class="item">`;
+      if (item.price) {
+        html += `<div class="item-row has-price"><div class="item-name"><span>${item.name}</span></div><div class="item-price">${item.price}</div></div>`;
+      } else {
+        html += `<div class="item-row"><div class="item-name"><span>${item.name}</span></div></div>`;
+      }
+      if (item.desc) html += `<div class="item-desc">${item.desc}</div>`;
+      if (item.variants) {
+        html += `<div class="variants">` + item.variants.map(v =>
+          `<div class="variant"><span class="variant-name"><span>${v.name}</span></span><span class="variant-price">${v.price}</span></div>`
+        ).join("") + `</div>`;
+      }
+      html += `</div>`;
+      return html;
+    }
+
+    function colsClass(slide) {
+      if (!slide.sections || slide.sections.length < 2) return "";
+      const items = slide.sections.reduce((n, s) => n + s.items.length, 0);
+      if (slide.sections.length >= 3 || items >= 10) return "cols-2";
+      if (slide.sections.length === 2 && items >= 8) return "cols-2";
+      return "";
+    }
+
+    slides.forEach((slide, idx) => {
+      const n = String(idx + 1).padStart(2, "0");
+      const wrap = document.createElement("div");
+      wrap.className = "slide-wrap";
+      wrap.innerHTML = `<div class="slide-cap">${n} / ${String(total).padStart(2, "0")} · ${slide.id}</div>`;
+
+      const el = document.createElement("article");
+      el.className = `slide ${slide.type}`;
+      el.id = `slide-${slide.id}`;
+
+      if (slide.type === "cover") {
+        el.innerHTML = `
+          <div class="slide-inner">
+            <div class="cover-top">
+              <div class="brand">
+                <img class="logo-mark" src="mark.svg" alt="">
+                <div class="brand-name">Красногорские<br>бани</div>
+              </div>
+              <div class="kicker">${slide.kicker}</div>
+            </div>
+            <div class="cover-center">
+              <div class="big">${slide.title}</div>
+              <div class="sub">${slide.subtitle}</div>
+              <div class="cats">${slide.categories}</div>
+            </div>
+            <div class="cover-bottom">
+              <span>${window.KB_MENU.address}</span>
+              <span>${window.KB_MENU.site}</span>
+            </div>
+          </div>`;
+      } else if (slide.type === "cta") {
+        el.innerHTML = `
+          <div class="slide-inner">
+            <img class="logo-mark" src="mark.svg" alt="">
+            <div class="brand-name">Красногорские бани</div>
+            <div class="big">${slide.title}</div>
+            <div class="sub">${slide.subtitle}</div>
+            <div class="facts">
+              ${slide.facts.map(f => `
+                <div class="fact">
+                  <div class="fact-label">${f.label}</div>
+                  <div class="fact-value">${f.value}</div>
+                </div>`).join("")}
+            </div>
+            <div class="links">WhatsApp · Telegram · <em>${window.KB_MENU.site}</em></div>
+          </div>`;
+      } else {
+        const cols = colsClass(slide);
+        if (cols) el.classList.add(cols);
+        el.innerHTML = `
+          <div class="slide-inner">
+            <div class="topbar">
+              <div class="brand">
+                <img class="logo-mark" src="mark.svg" alt="">
+                <div class="brand-name">Красногорские<br>бани</div>
+              </div>
+              <div class="head-right">
+                <div class="page-title">${slide.pageTitle}</div>
+                <div class="page-cats">${slide.categories || ""}</div>
+              </div>
+            </div>
+            <div class="content">
+              ${slide.sections.map(sec => `
+                <section class="section">
+                  <div class="section-name">${sec.name}</div>
+                  <div class="items">${sec.items.map(itemHTML).join("")}</div>
+                </section>`).join("")}
+            </div>
+            <div class="footer">
+              <span class="num">${n}</span>
+              <span>${window.KB_MENU.site}</span>
+            </div>
+          </div>`;
+      }
+
+      wrap.appendChild(el);
+      deck.appendChild(wrap);
+    });
+  </script>
+</body>
+</html>
