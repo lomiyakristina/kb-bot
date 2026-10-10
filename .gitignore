@@ -1,11 +1,13 @@
-# Secrets and local runtime
-vault/
-owner_chat_id.txt
-leads.log
 .env
 .env.*
-*.session
-*.session-journal
+data/*.sqlite
 __pycache__/
 .venv/
 venv/
+*.pyc
+.DS_Store
+vault/
+owner_chat_id.txt
+leads.log
+*.session
+*.session-journal

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Живой жар — предпросмотр бота</title>
+<style>
+  :root {
+    --gold: #f0d7a2;
+    --gold-deep: #c6a15a;
+    --ink: #1a120c;
+    --wood: #140e0a;
+    --panel: #241910;
+    --line: rgba(240, 215, 162, 0.35);
+    --cream: #f6efe4;
+    --mute: #b7a894;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh;
+    background:
+      radial-gradient(1200px 600px at 50% -10%, #3a2a1c 0%, transparent 55%),
+      #0c0907;
+    color: var(--cream);
+    font-family: "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, serif;
+    display: grid; place-items: center;
+    padding: 24px 12px;
+  }
+  .phone {
+    width: min(420px, 100%);
+    height: min(880px, 100vh);
+    background: linear-gradient(180deg, #1c1410, var(--wood));
+    border: 1px solid #3a2c20;
+    border-radius: 28px;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,.45);
+  }
+  header {
+    padding: 18px 18px 12px;
+    display: flex; justify-content: space-between; align-items: flex-end;
+    border-bottom: 1px solid #2c2118;
+  }
+  header b { display: block; font-size: 18px; font-weight: 600; letter-spacing: .02em; }
+  header span { color: var(--mute); font-family: -apple-system, sans-serif; font-size: 12px; }
+  .embers { display: flex; gap: 6px; padding-bottom: 4px; }
+  .embers i {
+    width: 9px; height: 9px; border-radius: 50%;
+    background: #3a2c22; display: block;
+    box-shadow: inset 0 0 0 1px #5c4632;
+  }
+  .embers i.on {
+    background: radial-gradient(circle at 40% 40%, #fff4d2, var(--gold-deep));
+    box-shadow: 0 0 8px rgba(240, 215, 162, .7);
+  }
+  #log {
+    flex: 1; overflow: auto; padding: 16px;
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  .bubble {
+    background: rgba(255,248,236,.04);
+    border: 1px solid #2e241c;
+    border-radius: 18px;
+    padding: 14px 14px 12px;
+    line-height: 1.45;
+    font-size: 16px;
+  }
+  .bubble img {
+    width: 100%; height: 168px; object-fit: cover;
+    border-radius: 12px; display: block; margin: -2px 0 12px;
+  }
+  .bubble b { font-weight: 650; }
+  .keys { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+  button {
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    cursor: pointer;
+  }
+  .keys button, .reply button {
+    border-radius: 14px;
+    min-height: 48px;
+    padding: 12px 14px;
+    font-size: 15px;
+    letter-spacing: .01em;
+  }
+  .keys button.gold, .reply button.gold {
+    background: linear-gradient(180deg, #f6e2b8, #d7b36a 55%, #b8924a);
+    color: var(--ink);
+    border: 0;
+    font-weight: 650;
+    box-shadow: 0 8px 20px rgba(198, 161, 90, .18);
+  }
+  .keys button.line, .reply button.line {
+    background: transparent;
+    color: var(--gold);
+    border: 1px solid var(--line);
+  }
+  .keys button.quiet, .reply button.quiet {
+    background: var(--panel);
+    color: var(--cream);
+    border: 1px solid #3a2c22;
+  }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .reply {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 12px 12px 16px;
+    background: #100c09;
+    border-top: 1px solid #2c2118;
+  }
+  .reply button.wide { grid-column: 1 / -1; }
+  .reply button.heat { grid-column: 1 / 2; }
+</style>
+</head>
+<body>
+<div class="phone">
+  <header>
+    <div>
+      <b>Красногорские бани</b>
+      <span>четыре часа · пар уже в билете</span>
+    </div>
+    <div class="embers" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+  </header>
+  <div id="log"></div>
+  <div class="reply" id="reply"></div>
+</div>
+<script>
+const log = document.getElementById("log");
+const reply = document.getElementById("reply");
+
+const menu = [
+  ["Зайти сегодня", "nearest", "gold wide"],
+  ["Женский", "female", "line"],
+  ["Мужской", "male", "line"],
+  ["Мой жар", "heat", "quiet"],
+  ["Ещё", "more", "quiet"],
+];
+
+const screens = {
+  start: {
+    img: "photos/hero.jpg",
+    html: "<b>Если зайти сейчас</b><br>сегодня, 16:00–20:00<br>5 700 ₽ за взрослого<br><br>Пар в 16:00 уже в билете.<br>Место держится после подтверждения.",
+    keys: [
+      ["Занять 16:00 · 5 700 ₽", "hall", "gold"],
+      ["Другой день", "dates", "line"]
+    ]
+  },
+  nearest: {
+    html: "<b>Ближайшее окно</b><br><br>Сегодня, 16:00–20:00<br>5 700 ₽ · 4 часа<br>Пар в 16:00 уже в билете.<br><br>Какой зал?",
+    keys: [
+      ["Женский", "guests", "gold"],
+      ["Мужской", "guests", "gold"],
+      ["Другой день", "dates", "line"]
+    ]
+  },
+  hall: {
+    html: "<b>Какой зал?</b><br>Две двери. Остальное подождёт.",
+    keys: [
+      ["Женский", "guests", "gold"],
+      ["Мужской", "guests-m", "gold"]
+    ]
+  },
+  female: {
+    img: "photos/female.jpg",
+    html: "<b>Женский</b><br>Пар, бассейн, купель. Общий пар каждые полтора часа уже в билете.<br><br>Отдельная комната до 4 гостей — 9 000 ₽ за 3 часа.",
+    keys: [
+      ["Занять 16:00 · 5 700 ₽", "guests", "gold"],
+      ["Комната на компанию", "vip-f", "line"]
+    ]
+  },
+  male: {
+    img: "photos/male.jpg",
+    html: "<b>Мужской</b><br>Пар, бассейн, купель и ресторан между заходами.<br><br>Комната до 12 гостей — 21 000 ₽ за 3 часа.",
+    keys: [
+      ["Занять 16:00 · 5 700 ₽", "guests-m", "gold"],
+      ["Комната на компанию", "vip-m", "line"]
+    ]
+  },
+  "vip-f": {
+    html: "<b>Женский VIP</b><br>До 4 гостей · 9 000 ₽ · 3 часа.<br>Одна сумма за комнату.",
+    keys: [["Оставить заявку", "name", "gold"]]
+  },
+  "vip-m": {
+    html: "<b>Мужской VIP</b><br>До 12 гостей · 21 000 ₽ · 3 часа.<br>Кабина до 6 — 9 000 ₽.",
+    keys: [["Оставить заявку", "name", "gold"]]
+  },
+  guests: {
+    html: "<b>Женский · сегодня 16:00</b><br>5 700 ₽ за взрослого.<br><br>Сколько вас?",
+    keys: [
+      ["Я одна", "name", "gold"],
+      ["Двое", "name", "line"],
+      ["Больше", "name", "quiet"]
+    ]
+  },
+  "guests-m": {
+    html: "<b>Мужской · сегодня 16:00</b><br>5 700 ₽ за взрослого.<br><br>Сколько вас?",
+    keys: [
+      ["Я один", "name", "gold"],
+      ["Двое", "name", "line"],
+      ["Компания", "vip-m", "quiet"]
+    ]
+  },
+  dates: {
+    html: "<b>Когда?</b><br>Будни до 14:00 — 4 500 ₽<br>Вечер и выходные — 5 700 ₽",
+    keys: [
+      ["Сегодня вечер · 5 700 ₽", "hall", "gold"],
+      ["Завтра утро · 4 500 ₽", "hall", "line"],
+      ["Выходные · 5 700 ₽", "hall", "quiet"]
+    ]
+  },
+  name: { html: "<b>Как к вам обращаться?</b><br>Так администратор подтвердит окно.", keys: [["Анна", "phone", "gold"]] },
+  phone: { html: "<b>Телефон</b><br>Только чтобы подтвердить это окно.", keys: [["8 925 000-00-00", "draft", "gold"]] },
+  draft: {
+    html: "<b>Проверьте</b><br><br>Женский зал<br>сегодня, 16:00–20:00<br>двое · Анна<br><br>Ориентир 5 700 ₽ × 2<br>Детям до 7 — бесплатно, с 7 до 12 — половина.<br><br>До кнопки администратора место не занято.",
+    keys: [["Отправить заявку", "sent", "gold"], ["Не сейчас", "start", "quiet"]]
+  },
+  sent: {
+    html: "<b>Заявка у администратора</b><br><br>Когда окно подтвердят, сюда придёт сообщение.<br><br>●○○○○<br>Первый огонёк зажжётся с подтверждённым визитом.",
+    keys: [["Мой жар", "heat", "line"]]
+  },
+  heat: {
+    html: "<b>Мой жар</b><br>●○○○○  <b>Искра</b><br>Первый заход. Ближайшее окно уже на кнопке.<br><br>Дальше — Уголёк. Зажигается подтверждённым визитом.<br><br>На третьем огоньке администратор видит, что вы свой. На пятом встречают по имени.",
+    keys: [
+      ["Занять ближайшее окно", "nearest", "gold"],
+      ["Огонёк на сегодня", "ritual", "line"]
+    ]
+  },
+  ritual: {
+    html: "<b>На сегодня</b><br><br>Четыре часа — длина сеанса, не задание. Выйдите раньше, если тело просит.<br><br>Завтра будет другая строка.",
+    keys: [["К окну", "nearest", "gold"]]
+  },
+  more: {
+    html: "<b>Если нужно не сейчас</b>",
+    keys: [
+      ["Тариф", "tariffs", "line"],
+      ["Пар по часам", "schedule", "line"],
+      ["Парения и SPA", "spa", "quiet"],
+      ["Подарок", "gift", "quiet"],
+      ["Как добраться", "contacts", "quiet"],
+      ["Что взять с собой", "pack", "quiet"]
+    ]
+  },
+  tariffs: {
+    html: "<b>Билет</b><br>4 часа.<br><br>Будни до 14:00 — 4 500 ₽<br>Вечер и выходные — 5 700 ₽<br>До 7 лет бесплатно, 7–12 — половина<br>Пн–ср утро по удостоверению — 1 500 ₽",
+    keys: [["Занять ближайшее", "nearest", "gold"]]
+  },
+  schedule: {
+    html: "<b>Авторский пар</b><br>Каждые полтора часа, уже в билете.<br><br>10:00 · 11:30 · 13:00<br>14:30 · 16:00 · 17:30<br>19:00 · 20:30 · 22:00",
+    keys: [["Занять ближайшее", "nearest", "gold"]]
+  },
+  spa: {
+    html: "<b>Если захочется отдельно</b><br><br>Пар, 2 руки — 6 000 ₽<br>Мойка 15 мин — 4 000 ₽<br>Скраб — 5 000 ₽<br><br>Это не в билете. Можно добавить к визиту на месте.",
+    keys: [["Сначала зал", "hall", "gold"]]
+  },
+  gift: {
+    html: "<b>Подарок</b><br>Сертификат на сумму из прайса. Администратор подготовит.",
+    keys: [["4 500 ₽", "sent", "line"], ["5 700 ₽", "sent", "line"], ["Комната 9 000 ₽", "sent", "quiet"]]
+  },
+  contacts: {
+    html: "<b>Как добраться</b><br><br>Москворецкий бульвар, 2а/1<br>Вход с 9:00<br>8 925 105-77-77<br>Канал @krasnogorskie_bani",
+    keys: [["Занять окно", "nearest", "gold"]]
+  },
+  pack: {
+    html: "<b>Что взять</b><br><br>Шапка — все и так знают. Свою можно купить на месте.<br>Простынь — хлопок, не махра.<br>Свои сланцы. Вода до и после.<br>Крем — только после душа.",
+    keys: [["К окну", "nearest", "gold"]]
+  }
+};
+
+function renderReply() {
+  reply.innerHTML = "";
+  menu.forEach(([label, id, kind]) => {
+    const b = document.createElement("button");
+    b.textContent = label;
+    b.className = kind;
+    b.onclick = () => show(id);
+    reply.appendChild(b);
+  });
+}
+
+function show(id) {
+  const screen = screens[id];
+  if (!screen) return;
+  const bubble = document.createElement("div");
+  bubble.className = "bubble";
+  if (screen.img) {
+    const img = document.createElement("img");
+    img.src = screen.img;
+    img.alt = "";
+    bubble.appendChild(img);
+  }
+  const text = document.createElement("div");
+  text.innerHTML = screen.html;
+  bubble.appendChild(text);
+  if (screen.keys.length) {
+    const keys = document.createElement("div");
+    keys.className = "keys";
+    const golds = screen.keys.filter((k) => k[2] === "gold");
+    const rest = screen.keys.filter((k) => k[2] !== "gold");
+    golds.forEach(([label, next, kind]) => keys.appendChild(makeKey(label, next, kind)));
+    if (rest.length && rest.every((k) => k[2] === "line" || k[2] === "quiet") && rest.length === 2) {
+      const pair = document.createElement("div");
+      pair.className = "pair";
+      rest.forEach(([label, next, kind]) => pair.appendChild(makeKey(label, next, kind)));
+      keys.appendChild(pair);
+    } else {
+      rest.forEach(([label, next, kind]) => keys.appendChild(makeKey(label, next, kind)));
+    }
+    bubble.appendChild(keys);
+  }
+  log.appendChild(bubble);
+  log.scrollTop = log.scrollHeight;
+}
+
+function makeKey(label, next, kind) {
+  const b = document.createElement("button");
+  b.textContent = label;
+  b.className = kind || "quiet";
+  b.onclick = () => show(next);
+  return b;
+}
+
+renderReply();
+show("start");
+</script>
+</body>
+</html>

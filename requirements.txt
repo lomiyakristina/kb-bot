@@ -1,1 +1,2 @@
-# No third-party packages — bot uses stdlib only
+aiogram==3.13.1
+openpyxl==3.1.5
