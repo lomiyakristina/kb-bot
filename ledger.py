@@ -94,6 +94,7 @@ def write(conn: sqlite3.Connection) -> Path:
     headers = [
         "Имя",
         "Telegram",
+        "Откуда",
         "Первый Старт",
         "Последний заход",
         "Раз нажал Старт",
@@ -114,9 +115,15 @@ def write(conn: sqlite3.Connection) -> Path:
         booking = latest_booking.get(user_id)
         looked = by_user_buttons.get(user_id, set())
         status = booking["status"] if booking else None
+        source = ""
+        try:
+            source = user["source"] or ""
+        except (IndexError, KeyError):
+            source = ""
         guests.append([
             user["full_name"] or "",
             f"@{user['username']}" if user["username"] else "",
+            source,
             stamp(user["created_at"]),
             stamp(user["last_start_at"]),
             int(user["start_count"] or 0),

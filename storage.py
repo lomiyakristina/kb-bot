@@ -100,6 +100,10 @@ class Storage:
         if "blocked" not in user_columns:
             self._conn.execute("ALTER TABLE users ADD COLUMN blocked INTEGER NOT NULL DEFAULT 0")
             self._conn.commit()
+        user_columns = {row[1] for row in self._conn.execute("PRAGMA table_info(users)")}
+        if "source" not in user_columns:
+            self._conn.execute("ALTER TABLE users ADD COLUMN source TEXT")
+            self._conn.commit()
         self._backfill_steps()
 
     def _backfill_steps(self) -> None:
@@ -272,15 +276,25 @@ class Storage:
     def note_start(self, user_id: int) -> list[str]:
         return self._once_flag(user_id, "got_start", "entered", 8)
 
-    def mark_start(self, user_id: int) -> tuple[bool, sqlite3.Row]:
+    def mark_start(self, user_id: int, source: str | None = None) -> tuple[bool, sqlite3.Row]:
         with self._lock:
             user = self.user(user_id)
             first = int(user["start_count"] or 0) == 0
+            clean = _clean_source(source)
+            # First non-empty mark sticks: where the guest originally came from.
+            keep_source = (user["source"] or "").strip() or clean
             self._conn.execute(
-                "UPDATE users SET last_start_at = ?, start_count = start_count + 1 WHERE user_id = ?",
-                (_now(), user_id),
+                """
+                UPDATE users
+                SET last_start_at = ?, start_count = start_count + 1, source = ?
+                WHERE user_id = ?
+                """,
+                (_now(), keep_source or None, user_id),
             )
-            self._log_unlocked(user_id, "start", "first" if first else "again")
+            label = "first" if first else "again"
+            if clean:
+                label = f"{label}:{clean}"
+            self._log_unlocked(user_id, "start", label)
             self._conn.commit()
             self._save_ledger()
             return first, self.user(user_id)
@@ -444,6 +458,15 @@ class Storage:
             (user_id, code, _now()),
         )
         return cur.rowcount == 1
+
+
+def _clean_source(raw: str | None) -> str:
+    """Deep-link payload from /start <mark>: letters, digits, _ - . only."""
+    if not raw:
+        return ""
+    text = raw.strip().lower()
+    cleaned = "".join(ch for ch in text if ch.isalnum() or ch in "._-")
+    return cleaned[:32]
 
 
 def _now() -> str:

@@ -9,7 +9,7 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from aiogram import F, Router
-from aiogram.filters import Command, CommandStart, StateFilter
+from aiogram.filters import Command, CommandObject, CommandStart, StateFilter
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import CallbackQuery, FSInputFile, Message
@@ -320,16 +320,41 @@ def format_stamp(raw: str | None) -> str:
     return f"{moment.day} {MONTHS[moment.month - 1]}, {moment:%H:%M}"
 
 
+SOURCE_LABELS = {
+    "instagram": "Instagram",
+    "ig": "Instagram",
+    "stories": "Stories",
+    "reels": "Reels",
+    "vk": "VK",
+    "friends": "Друзья",
+    "maps": "Карты",
+    "site": "Сайт",
+    "qr": "QR",
+    "ads": "Реклама",
+    "whatsapp": "WhatsApp",
+}
+
+
+def source_label(raw: str | None) -> str:
+    code = (raw or "").strip().lower()
+    if not code:
+        return ""
+    return SOURCE_LABELS.get(code, code)
+
+
 def start_card(row, first: bool) -> str:
     username = f"@{row['username']}" if row["username"] else "без username"
     title = "Новый человек нажал Старт" if first else "Снова нажал Старт"
     count = int(row["start_count"] or 0)
     when = "первый заход" if first else f"заход {count}"
+    source = source_label(row["source"] if "source" in row.keys() else None)
+    source_line = f"\nоткуда: {html.escape(source)}" if source else ""
     return (
         f"<b>{title}</b>\n"
         f"{html.escape(row['full_name'] or 'Гость')}\n"
         f"{html.escape(username)}\n"
-        f"{when} · {html.escape(format_stamp(row['last_start_at']))}\n"
+        f"{when} · {html.escape(format_stamp(row['last_start_at']))}"
+        f"{source_line}\n"
         f"id <code>{row['user_id']}</code>"
     )
 
@@ -353,9 +378,12 @@ def guests_text() -> str:
     lines = [f"<b>Кто нажал Старт</b> · {total}"]
     for index, row in enumerate(rows, start=1):
         username = f"@{row['username']}" if row["username"] else "без username"
+        source = source_label(row["source"] if "source" in row.keys() else None)
+        source_part = f" · откуда: {html.escape(source)}" if source else ""
         lines.append(
             f"\n{index}. {html.escape(row['full_name'] or 'Гость')} · {html.escape(username)}\n"
             f"последний заход {html.escape(format_stamp(row['last_start_at']))} · всего {int(row['start_count'] or 0)}"
+            f"{source_part}"
         )
     if total > len(rows):
         lines.append(f"\nПоказаны последние {len(rows)} из {total}.")
@@ -363,11 +391,11 @@ def guests_text() -> str:
 
 
 @router.message(CommandStart())
-async def cmd_start(message: Message, state: FSMContext) -> None:
+async def cmd_start(message: Message, state: FSMContext, command: CommandObject) -> None:
     await state.clear()
     user_id = remember(message)
     notes = store.note_start(user_id)
-    first, row = store.mark_start(user_id)
+    first, row = store.mark_start(user_id, command.args)
     text = WELCOME + "\n\n" + host_brief(now_msk())
     await show_welcome_video(message, with_notes(text, notes), welcome_keyboard())
     await message.answer("Клавиатура снизу — если нужно полистать залы.", reply_markup=main_keyboard())
