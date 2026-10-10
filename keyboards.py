@@ -67,6 +67,30 @@ def spaces_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=rows)
 
 
+def section_nav() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text="Позвонить", callback_data="call:now")],
+            [InlineKeyboardButton(text="Вернуться в основное меню", callback_data="menu:home")],
+        ]
+    )
+
+
+def with_nav(markup: InlineKeyboardMarkup) -> InlineKeyboardMarkup:
+    rows = [list(row) for row in markup.inline_keyboard]
+    rows.append([InlineKeyboardButton(text="Позвонить", callback_data="call:now")])
+    rows.append([InlineKeyboardButton(text="Вернуться в основное меню", callback_data="menu:home")])
+    return InlineKeyboardMarkup(inline_keyboard=rows)
+
+
+def home_keyboard() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text="Вернуться в основное меню", callback_data="menu:home")],
+        ]
+    )
+
+
 def welcome_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
         inline_keyboard=[
