@@ -394,11 +394,9 @@ def guests_text() -> str:
 async def cmd_start(message: Message, state: FSMContext, command: CommandObject) -> None:
     await state.clear()
     user_id = remember(message)
-    notes = store.note_start(user_id)
+    store.note_start(user_id)
     first, row = store.mark_start(user_id, command.args)
-    text = WELCOME + "\n\n" + host_brief(now_msk())
-    await show_welcome_video(message, with_notes(text, notes), welcome_keyboard())
-    await message.answer("Клавиатура снизу — если нужно полистать залы.", reply_markup=main_keyboard())
+    await message.answer(WELCOME, reply_markup=welcome_keyboard())
     await notify_start(message, row, first)
 
 

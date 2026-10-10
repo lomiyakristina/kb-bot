@@ -70,11 +70,12 @@ def spaces_keyboard() -> InlineKeyboardMarkup:
 def welcome_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
         inline_keyboard=[
-            [InlineKeyboardButton(text="Позвонить", callback_data="call:now")],
             [InlineKeyboardButton(text="Тарифы", callback_data="more:tariffs")],
-            [InlineKeyboardButton(text="Мужской разряд", callback_data="hall:male"),
-             InlineKeyboardButton(text="Женский разряд", callback_data="hall:female")],
-            [InlineKeyboardButton(text="Забронировать VIP", callback_data="book:vip")],
+            [InlineKeyboardButton(text="Женский разряд", callback_data="hall:female")],
+            [InlineKeyboardButton(text="Мужской разряд", callback_data="hall:male")],
+            [InlineKeyboardButton(text="Меню ресторана", callback_data="restaurant")],
+            [InlineKeyboardButton(text="Меню парений", callback_data="more:spa")],
+            [InlineKeyboardButton(text="Расписание паров", callback_data="more:schedule")],
         ]
     )
 
