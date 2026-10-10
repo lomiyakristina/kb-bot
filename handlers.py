@@ -53,7 +53,6 @@ from keyboards import (
     contacts_keyboard,
     days_keyboard,
     guests_keyboard,
-    hall_keyboard,
     heat_keyboard,
     home_keyboard,
     main_keyboard,
@@ -66,7 +65,6 @@ from keyboards import (
     section_nav,
     upsell_keyboard,
     user_cancel_keyboard,
-    with_nav,
 )
 from logic import (
     Slot,
@@ -583,16 +581,16 @@ async def on_menu(message: Message, state: FSMContext) -> None:
     store.log(user_id, "button", text)
     if text == MENU["female"]:
         notes = store.note_hall(user_id, "female")
-        await show_photo(message, HALLS["female"]["photo"], with_notes(HALLS["female"]["text"], notes), with_nav(hall_keyboard("female")))
+        await show_photo(message, HALLS["female"]["photo"], with_notes(HALLS["female"]["text"], notes), section_nav())
     elif text == MENU["male"]:
         notes = store.note_hall(user_id, "male")
-        await show_photo(message, HALLS["male"]["photo"], with_notes(HALLS["male"]["text"], notes), with_nav(hall_keyboard("male")))
+        await show_photo(message, HALLS["male"]["photo"], with_notes(HALLS["male"]["text"], notes), section_nav())
     elif text == MENU["tariffs"]:
         notes = store.note_tariffs(user_id)
         await show_photo(message, "tariffs.png", with_notes(TARIFFS, notes), section_nav())
     elif text == MENU["schedule"]:
         notes = store.note_schedule(user_id, now_msk().date().isoformat())
-        await message.answer(with_notes(schedule_text(), notes), reply_markup=with_nav(book_halls_keyboard()))
+        await message.answer(with_notes(schedule_text(), notes), reply_markup=section_nav())
     elif text == MENU["spa"]:
         await message.answer(SPA, reply_markup=section_nav())
     elif text == MENU["nearest"]:
@@ -639,7 +637,7 @@ async def on_hall(query: CallbackQuery) -> None:
     store.ensure_user(user.id, user.username, user.full_name or "Гость")
     notes = store.note_hall(user.id, hall)
     await toast(notes, query)
-    await show_photo(query.message, HALLS[hall]["photo"], with_notes(HALLS[hall]["text"], notes), with_nav(hall_keyboard(hall)))
+    await show_photo(query.message, HALLS[hall]["photo"], with_notes(HALLS[hall]["text"], notes), section_nav())
 
 
 @router.callback_query(F.data == "spaces")
@@ -693,7 +691,7 @@ async def on_more(query: CallbackQuery, state: FSMContext) -> None:
         await show_photo(query.message, "tariffs.png", with_notes(TARIFFS, notes), section_nav())
     elif key == "schedule":
         notes = store.note_schedule(user_id, now_msk().date().isoformat())
-        await query.message.answer(with_notes(schedule_text(), notes), reply_markup=with_nav(book_halls_keyboard()))
+        await query.message.answer(with_notes(schedule_text(), notes), reply_markup=section_nav())
     elif key == "spa":
         await query.message.answer(SPA, reply_markup=section_nav())
     elif key == "gift":
