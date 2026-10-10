@@ -12,7 +12,7 @@ from aiogram import F, Router
 from aiogram.filters import Command, CommandObject, CommandStart, StateFilter
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
-from aiogram.types import CallbackQuery, FSInputFile, Message
+from aiogram.types import CallbackQuery, FSInputFile, InputMediaPhoto, Message
 
 from content import (
     ACHIEVEMENTS,
@@ -27,13 +27,16 @@ from content import (
     HOURS,
     MENU,
     OFFERS,
+    OWNER_ID,
     INSTAGRAM_URL,
     PHONE_DISPLAY,
     PHONE_TEL,
     RANKS,
     RESTAURANT,
+    RESTAURANT_PHOTOS,
     RITUALS,
     SPA,
+    SPA_PHOTOS,
     STEAM_TIMES,
     TELEGRAM_URL,
     TARIFFS,
@@ -49,12 +52,11 @@ from keyboards import (
     confirm_keyboard,
     faq_keyboard,
     fit_keyboard,
-    host_keyboard,
     contacts_keyboard,
     days_keyboard,
     guests_keyboard,
-    hall_keyboard,
     heat_keyboard,
+    home_keyboard,
     main_keyboard,
     more_keyboard,
     welcome_keyboard,
@@ -62,6 +64,7 @@ from keyboards import (
     offers_keyboard,
     slots_keyboard,
     spaces_keyboard,
+    section_nav,
     upsell_keyboard,
     user_cancel_keyboard,
 )
@@ -143,6 +146,25 @@ async def show_photo(message: Message, filename: str, caption: str, markup) -> N
         await message.answer_photo(FSInputFile(path), caption=caption, reply_markup=markup)
     else:
         await message.answer(caption, reply_markup=markup)
+
+
+async def show_album(message: Message, names: list[str], text: str, fallback: str = "") -> None:
+    paths = [ROOT / "photos" / name for name in names if (ROOT / "photos" / name).exists()]
+    if len(paths) > 1:
+        await message.answer_media_group([InputMediaPhoto(media=FSInputFile(path)) for path in paths])
+        await message.answer(text, reply_markup=section_nav())
+        return
+    filename = paths[0].name if paths else fallback
+    if filename:
+        await show_photo(message, filename, text, section_nav())
+    else:
+        await message.answer(text, reply_markup=section_nav())
+
+
+async def show_hall(message: Message, hall: str, notes: list[str]) -> None:
+    text = with_notes(HALLS[hall]["text"], notes)
+    names = list(HALLS[hall].get("photos") or [HALLS[hall]["photo"]])
+    await show_album(message, names, text, fallback=HALLS[hall]["photo"])
 
 
 async def show_welcome_video(message: Message, caption: str, markup) -> None:
@@ -264,7 +286,7 @@ async def notify_admins(message: Message, booking_id: int) -> None:
     markup = admin_keyboard(booking_id, "new")
     delivered = False
     guest_id = int(row["user_id"])
-    for admin_id in ADMIN_IDS:
+    for admin_id in (OWNER_ID,):
         if admin_id == guest_id:
             continue
         try:
@@ -362,7 +384,7 @@ def start_card(row, first: bool) -> str:
 async def notify_start(message: Message, row, first: bool) -> None:
     text = start_card(row, first)
     guest_id = message.from_user.id if message.from_user else int(row["user_id"])
-    for admin_id in ADMIN_IDS:
+    for admin_id in (OWNER_ID,):
         if admin_id == guest_id:
             continue
         try:
@@ -394,11 +416,9 @@ def guests_text() -> str:
 async def cmd_start(message: Message, state: FSMContext, command: CommandObject) -> None:
     await state.clear()
     user_id = remember(message)
-    notes = store.note_start(user_id)
+    store.note_start(user_id)
     first, row = store.mark_start(user_id, command.args)
-    text = WELCOME + "\n\n" + host_brief(now_msk())
-    await show_welcome_video(message, with_notes(text, notes), welcome_keyboard())
-    await message.answer("Клавиатура снизу — если нужно полистать залы.", reply_markup=main_keyboard())
+    await message.answer(WELCOME, reply_markup=welcome_keyboard())
     await notify_start(message, row, first)
 
 
@@ -582,18 +602,18 @@ async def on_menu(message: Message, state: FSMContext) -> None:
     store.log(user_id, "button", text)
     if text == MENU["female"]:
         notes = store.note_hall(user_id, "female")
-        await show_photo(message, HALLS["female"]["photo"], with_notes(HALLS["female"]["text"], notes), hall_keyboard("female"))
+        await show_hall(message, "female", notes)
     elif text == MENU["male"]:
         notes = store.note_hall(user_id, "male")
-        await show_photo(message, HALLS["male"]["photo"], with_notes(HALLS["male"]["text"], notes), hall_keyboard("male"))
+        await show_hall(message, "male", notes)
     elif text == MENU["tariffs"]:
         notes = store.note_tariffs(user_id)
-        await message.answer(with_notes(TARIFFS, notes), reply_markup=main_keyboard())
+        await show_photo(message, "tariffs.png", with_notes(TARIFFS, notes), section_nav())
     elif text == MENU["schedule"]:
         notes = store.note_schedule(user_id, now_msk().date().isoformat())
-        await message.answer(with_notes(schedule_text(), notes), reply_markup=book_halls_keyboard())
+        await message.answer(with_notes(schedule_text(), notes), reply_markup=section_nav())
     elif text == MENU["spa"]:
-        await message.answer(SPA, reply_markup=main_keyboard())
+        await show_album(message, SPA_PHOTOS, SPA)
     elif text == MENU["nearest"]:
         await message.answer(host_brief(now_msk()) + "\n\nКакой разряд?", reply_markup=nearest_halls_keyboard())
     elif text == MENU["book"]:
@@ -613,9 +633,17 @@ async def on_call(query: CallbackQuery) -> None:
     store.ensure_user(user.id, user.username, user.full_name or "Гость")
     store.log(user.id, "button", "Позвонить")
     await query.message.answer(
-        "Нажмите номер — телефон откроет набор.\n"
-        f"<a href=\"tel:{PHONE_TEL}\">{PHONE_DISPLAY}</a>"
+        f'Позвонить по телефону <a href="tel:{PHONE_TEL}">8-925-105-77-77</a>',
+        reply_markup=home_keyboard(),
     )
+    await query.answer()
+
+
+@router.callback_query(F.data == "menu:home")
+async def on_home(query: CallbackQuery, state: FSMContext) -> None:
+    assert query.message
+    await state.clear()
+    await query.message.answer(WELCOME, reply_markup=welcome_keyboard())
     await query.answer()
 
 
@@ -630,7 +658,7 @@ async def on_hall(query: CallbackQuery) -> None:
     store.ensure_user(user.id, user.username, user.full_name or "Гость")
     notes = store.note_hall(user.id, hall)
     await toast(notes, query)
-    await show_photo(query.message, HALLS[hall]["photo"], with_notes(HALLS[hall]["text"], notes), hall_keyboard(hall))
+    await show_hall(query.message, hall, notes)
 
 
 @router.callback_query(F.data == "spaces")
@@ -658,7 +686,7 @@ async def on_wait(query: CallbackQuery) -> None:
         await query.message.answer(
             f"Вы в листе на «{title}». Администратор это видит и сможет написать, когда зал откроют."
         )
-        for admin_id in ADMIN_IDS:
+        for admin_id in (OWNER_ID,):
             if admin_id == user.id:
                 continue
             try:
@@ -681,12 +709,12 @@ async def on_more(query: CallbackQuery, state: FSMContext) -> None:
     store.ensure_user(user_id, query.from_user.username, query.from_user.full_name or "Гость")
     if key == "tariffs":
         notes = store.note_tariffs(user_id)
-        await query.message.answer(with_notes(TARIFFS, notes), reply_markup=host_keyboard())
+        await show_photo(query.message, "tariffs.png", with_notes(TARIFFS, notes), section_nav())
     elif key == "schedule":
         notes = store.note_schedule(user_id, now_msk().date().isoformat())
-        await query.message.answer(with_notes(schedule_text(), notes), reply_markup=book_halls_keyboard())
+        await query.message.answer(with_notes(schedule_text(), notes), reply_markup=section_nav())
     elif key == "spa":
-        await query.message.answer(SPA, reply_markup=main_keyboard())
+        await show_album(query.message, SPA_PHOTOS, SPA)
     elif key == "gift":
         await query.message.answer("Сертификат на сумму из прайса. Администратор подготовит.", reply_markup=certificate_keyboard())
     elif key == "contacts":
@@ -704,7 +732,7 @@ async def on_visit(query: CallbackQuery) -> None:
 @router.callback_query(F.data == "restaurant")
 async def on_restaurant(query: CallbackQuery) -> None:
     assert query.message
-    await show_photo(query.message, "restaurant.jpg", RESTAURANT, main_keyboard())
+    await show_album(query.message, RESTAURANT_PHOTOS, RESTAURANT, fallback="restaurant.jpg")
     await query.answer()
 
 

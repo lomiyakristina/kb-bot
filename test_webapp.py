@@ -76,7 +76,7 @@ class WebappTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(quoted["price_each"], 9000)
         self.assertEqual(quoted["price_flat"], 1)
         self.assertIn("Комната", quoted["estimate"])
-        payload["guests"] = 5
+        payload["guests"] = 7
         with self.assertRaises(Exception):
             quote(payload, now)
 

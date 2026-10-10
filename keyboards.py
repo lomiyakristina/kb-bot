@@ -49,13 +49,12 @@ def hall_keyboard(hall: str) -> InlineKeyboardMarkup:
         for key in HALLS
         if key != hall
     ]
-    return InlineKeyboardMarkup(
-        inline_keyboard=[
-            [InlineKeyboardButton(text="Забронировать этот разряд", callback_data=f"book:{hall}")],
-            others,
-            [InlineKeyboardButton(text="Скоро откроется", callback_data="spaces")],
-        ]
-    )
+    rows = []
+    if hall != "female":
+        rows.append([InlineKeyboardButton(text="Забронировать этот разряд", callback_data=f"book:{hall}")])
+    rows.append(others)
+    rows.append([InlineKeyboardButton(text="Скоро откроется", callback_data="spaces")])
+    return InlineKeyboardMarkup(inline_keyboard=rows)
 
 
 def spaces_keyboard() -> InlineKeyboardMarkup:
@@ -67,14 +66,39 @@ def spaces_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=rows)
 
 
-def welcome_keyboard() -> InlineKeyboardMarkup:
+def section_nav() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
         inline_keyboard=[
             [InlineKeyboardButton(text="Позвонить", callback_data="call:now")],
+            [InlineKeyboardButton(text="Вернуться назад", callback_data="menu:home")],
+        ]
+    )
+
+
+def with_nav(markup: InlineKeyboardMarkup) -> InlineKeyboardMarkup:
+    rows = [list(row) for row in markup.inline_keyboard]
+    rows.append([InlineKeyboardButton(text="Позвонить", callback_data="call:now")])
+    rows.append([InlineKeyboardButton(text="Вернуться назад", callback_data="menu:home")])
+    return InlineKeyboardMarkup(inline_keyboard=rows)
+
+
+def home_keyboard() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text="Вернуться назад", callback_data="menu:home")],
+        ]
+    )
+
+
+def welcome_keyboard() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
             [InlineKeyboardButton(text="Тарифы", callback_data="more:tariffs")],
-            [InlineKeyboardButton(text="Мужской разряд", callback_data="hall:male"),
-             InlineKeyboardButton(text="Женский разряд", callback_data="hall:female")],
-            [InlineKeyboardButton(text="Забронировать VIP", callback_data="book:vip")],
+            [InlineKeyboardButton(text="Женский разряд", callback_data="hall:female")],
+            [InlineKeyboardButton(text="Мужской разряд", callback_data="hall:male")],
+            [InlineKeyboardButton(text="Меню ресторана", callback_data="restaurant")],
+            [InlineKeyboardButton(text="Меню парений", callback_data="more:spa")],
+            [InlineKeyboardButton(text="Расписание паров", callback_data="more:schedule")],
         ]
     )
 

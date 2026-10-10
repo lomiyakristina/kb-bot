@@ -136,5 +136,26 @@ class StorageTests(unittest.TestCase):
             db.close()
 
 
+class HallPhotoTests(unittest.TestCase):
+    def test_section_photos_are_on_disk(self) -> None:
+        from content import HALLS, RESTAURANT_PHOTOS, SPA_PHOTOS
+
+        expected = {
+            "male": HALLS["male"]["photos"],
+            "female": HALLS["female"]["photos"],
+            "restaurant": RESTAURANT_PHOTOS,
+            "spa": SPA_PHOTOS,
+        }
+        counts = {"male": 7, "female": 5, "restaurant": 4, "spa": 3}
+        root = Path(__file__).resolve().parent / "photos"
+        for label, names in expected.items():
+            self.assertEqual(len(names), counts[label], label)
+            for name in names:
+                path = root / name
+                self.assertTrue(path.is_file(), name)
+                self.assertGreater(path.stat().st_size, 10_000)
+                self.assertLess(path.stat().st_size, 1_000_000)
+
+
 if __name__ == "__main__":
     unittest.main()
