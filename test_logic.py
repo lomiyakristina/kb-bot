@@ -137,14 +137,18 @@ class StorageTests(unittest.TestCase):
 
 
 class HallPhotoTests(unittest.TestCase):
-    def test_hall_photos_are_on_disk(self) -> None:
-        from content import HALLS
+    def test_section_photos_are_on_disk(self) -> None:
+        from content import HALLS, RESTAURANT_PHOTOS
 
-        expected = {"male": 7, "female": 5}
+        expected = {
+            "male": HALLS["male"]["photos"],
+            "female": HALLS["female"]["photos"],
+            "restaurant": RESTAURANT_PHOTOS,
+        }
+        counts = {"male": 7, "female": 5, "restaurant": 4}
         root = Path(__file__).resolve().parent / "photos"
-        for hall, count in expected.items():
-            names = HALLS[hall]["photos"]
-            self.assertEqual(len(names), count, hall)
+        for label, names in expected.items():
+            self.assertEqual(len(names), counts[label], label)
             for name in names:
                 path = root / name
                 self.assertTrue(path.is_file(), name)

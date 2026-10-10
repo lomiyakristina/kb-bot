@@ -33,6 +33,7 @@ from content import (
     PHONE_TEL,
     RANKS,
     RESTAURANT,
+    RESTAURANT_PHOTOS,
     RITUALS,
     SPA,
     STEAM_TIMES,
@@ -146,16 +147,23 @@ async def show_photo(message: Message, filename: str, caption: str, markup) -> N
         await message.answer(caption, reply_markup=markup)
 
 
-async def show_hall(message: Message, hall: str, notes: list[str]) -> None:
-    text = with_notes(HALLS[hall]["text"], notes)
-    names = list(HALLS[hall].get("photos") or [HALLS[hall]["photo"]])
+async def show_album(message: Message, names: list[str], text: str, fallback: str = "") -> None:
     paths = [ROOT / "photos" / name for name in names if (ROOT / "photos" / name).exists()]
     if len(paths) > 1:
         await message.answer_media_group([InputMediaPhoto(media=FSInputFile(path)) for path in paths])
         await message.answer(text, reply_markup=section_nav())
         return
-    filename = paths[0].name if paths else HALLS[hall]["photo"]
-    await show_photo(message, filename, text, section_nav())
+    filename = paths[0].name if paths else fallback
+    if filename:
+        await show_photo(message, filename, text, section_nav())
+    else:
+        await message.answer(text, reply_markup=section_nav())
+
+
+async def show_hall(message: Message, hall: str, notes: list[str]) -> None:
+    text = with_notes(HALLS[hall]["text"], notes)
+    names = list(HALLS[hall].get("photos") or [HALLS[hall]["photo"]])
+    await show_album(message, names, text, fallback=HALLS[hall]["photo"])
 
 
 async def show_welcome_video(message: Message, caption: str, markup) -> None:
@@ -723,7 +731,7 @@ async def on_visit(query: CallbackQuery) -> None:
 @router.callback_query(F.data == "restaurant")
 async def on_restaurant(query: CallbackQuery) -> None:
     assert query.message
-    await show_photo(query.message, "restaurant.jpg", RESTAURANT, section_nav())
+    await show_album(query.message, RESTAURANT_PHOTOS, RESTAURANT, fallback="restaurant.jpg")
     await query.answer()
 
 
