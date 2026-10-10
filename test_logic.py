@@ -136,5 +136,18 @@ class StorageTests(unittest.TestCase):
             db.close()
 
 
+class HallPhotoTests(unittest.TestCase):
+    def test_male_hall_photos_are_on_disk(self) -> None:
+        from content import HALLS
+
+        names = HALLS["male"]["photos"]
+        self.assertEqual(len(names), 7)
+        root = Path(__file__).resolve().parent / "photos"
+        for name in names:
+            path = root / name
+            self.assertTrue(path.is_file(), name)
+            self.assertGreater(path.stat().st_size, 10_000)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -43,6 +43,15 @@ HALLS: dict[str, dict] = {
     "male": {
         "title": "Мужской разряд",
         "photo": "male.jpg",
+        "photos": [
+            "male-parnaya.jpg",
+            "male-pool.jpg",
+            "male-rest-1.jpg",
+            "male-rest-2.jpg",
+            "male-rest-3.jpg",
+            "male-kupel.jpg",
+            "male-showers.jpg",
+        ],
         "bookable": True,
         "text": (
             "<b>Мужской разряд</b>\n\n"

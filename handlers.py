@@ -12,7 +12,7 @@ from aiogram import F, Router
 from aiogram.filters import Command, CommandObject, CommandStart, StateFilter
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
-from aiogram.types import CallbackQuery, FSInputFile, Message
+from aiogram.types import CallbackQuery, FSInputFile, InputMediaPhoto, Message
 
 from content import (
     ACHIEVEMENTS,
@@ -144,6 +144,18 @@ async def show_photo(message: Message, filename: str, caption: str, markup) -> N
         await message.answer_photo(FSInputFile(path), caption=caption, reply_markup=markup)
     else:
         await message.answer(caption, reply_markup=markup)
+
+
+async def show_hall(message: Message, hall: str, notes: list[str]) -> None:
+    text = with_notes(HALLS[hall]["text"], notes)
+    names = list(HALLS[hall].get("photos") or [HALLS[hall]["photo"]])
+    paths = [ROOT / "photos" / name for name in names if (ROOT / "photos" / name).exists()]
+    if len(paths) > 1:
+        await message.answer_media_group([InputMediaPhoto(media=FSInputFile(path)) for path in paths])
+        await message.answer(text, reply_markup=section_nav())
+        return
+    filename = paths[0].name if paths else HALLS[hall]["photo"]
+    await show_photo(message, filename, text, section_nav())
 
 
 async def show_welcome_video(message: Message, caption: str, markup) -> None:
@@ -581,10 +593,10 @@ async def on_menu(message: Message, state: FSMContext) -> None:
     store.log(user_id, "button", text)
     if text == MENU["female"]:
         notes = store.note_hall(user_id, "female")
-        await show_photo(message, HALLS["female"]["photo"], with_notes(HALLS["female"]["text"], notes), section_nav())
+        await show_hall(message, "female", notes)
     elif text == MENU["male"]:
         notes = store.note_hall(user_id, "male")
-        await show_photo(message, HALLS["male"]["photo"], with_notes(HALLS["male"]["text"], notes), section_nav())
+        await show_hall(message, "male", notes)
     elif text == MENU["tariffs"]:
         notes = store.note_tariffs(user_id)
         await show_photo(message, "tariffs.png", with_notes(TARIFFS, notes), section_nav())
@@ -637,7 +649,7 @@ async def on_hall(query: CallbackQuery) -> None:
     store.ensure_user(user.id, user.username, user.full_name or "Гость")
     notes = store.note_hall(user.id, hall)
     await toast(notes, query)
-    await show_photo(query.message, HALLS[hall]["photo"], with_notes(HALLS[hall]["text"], notes), section_nav())
+    await show_hall(query.message, hall, notes)
 
 
 @router.callback_query(F.data == "spaces")
