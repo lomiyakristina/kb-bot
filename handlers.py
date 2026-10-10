@@ -586,7 +586,7 @@ async def on_menu(message: Message, state: FSMContext) -> None:
         await show_photo(message, HALLS["male"]["photo"], with_notes(HALLS["male"]["text"], notes), hall_keyboard("male"))
     elif text == MENU["tariffs"]:
         notes = store.note_tariffs(user_id)
-        await message.answer(with_notes(TARIFFS, notes), reply_markup=main_keyboard())
+        await show_photo(message, "tariffs.png", with_notes(TARIFFS, notes), main_keyboard())
     elif text == MENU["schedule"]:
         notes = store.note_schedule(user_id, now_msk().date().isoformat())
         await message.answer(with_notes(schedule_text(), notes), reply_markup=book_halls_keyboard())
@@ -679,7 +679,7 @@ async def on_more(query: CallbackQuery, state: FSMContext) -> None:
     store.ensure_user(user_id, query.from_user.username, query.from_user.full_name or "Гость")
     if key == "tariffs":
         notes = store.note_tariffs(user_id)
-        await query.message.answer(with_notes(TARIFFS, notes), reply_markup=host_keyboard())
+        await show_photo(query.message, "tariffs.png", with_notes(TARIFFS, notes), host_keyboard())
     elif key == "schedule":
         notes = store.note_schedule(user_id, now_msk().date().isoformat())
         await query.message.answer(with_notes(schedule_text(), notes), reply_markup=book_halls_keyboard())
