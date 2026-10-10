@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Меню · Instagram · Красногорские бани</title>
+<style>
+  @font-face {
+    font-family: Unbounded;
+    src: url("fonts/Unbounded.ttf") format("truetype");
+    font-weight: 200 900;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "Golos Text";
+    src: url("fonts/GolosText.ttf") format("truetype");
+    font-weight: 400 900;
+    font-display: swap;
+  }
+
+  :root {
+    --bg: #fffaf5;
+    --bg-deep: #f3ebe0;
+    --ink: #14110f;
+    --muted: #7a7e89;
+    --gold: #bc8c4c;
+    --gold-soft: #bea481;
+    --green: #006726;
+    --line: rgba(188, 140, 76, 0.28);
+    --slide-w: 1080px;
+    --slide-h: 1350px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Golos Text", sans-serif;
+    background: #1a1612;
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  .page-head {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 40px 24px 20px;
+    color: #f5eadb;
+    text-align: center;
+  }
+  .page-head h1 {
+    font-family: Unbounded, sans-serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .page-head p {
+    color: rgba(245, 234, 219, 0.72);
+    font-size: 15px;
+    line-height: 1.55;
+  }
+  .page-head a { color: var(--gold-soft); }
+
+  .deck {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 48px;
+    padding: 24px 16px 80px;
+  }
+
+  .slide-wrap {
+    width: min(100%, 540px);
+  }
+  .slide-cap {
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(245, 234, 219, 0.45);
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  .slide {
+    width: var(--slide-w);
+    height: var(--slide-h);
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(1200px 700px at 85% -10%, rgba(188,140,76,0.16), transparent 55%),
+      radial-gradient(900px 600px at -10% 110%, rgba(0,103,38,0.10), transparent 50%),
+      linear-gradient(180deg, #fffaf5 0%, #f7efe4 100%);
+    color: var(--ink);
+    transform-origin: top left;
+  }
+
+  /* Preview scale on narrow screens */
+  @media (max-width: 1120px) {
+    .slide-wrap { width: min(100%, 405px); }
+    .slide { transform: scale(0.375); margin-bottom: calc(var(--slide-h) * -0.625); }
+  }
+  @media (min-width: 1121px) {
+    .slide-wrap { width: 540px; }
+    .slide { transform: scale(0.5); margin-bottom: calc(var(--slide-h) * -0.5); }
+  }
+
+  /* Export mode: exact pixels, no scale */
+  body.export {
+    background: var(--bg);
+    margin: 0;
+    overflow: hidden;
+  }
+  body.export .page-head,
+  body.export .slide-cap { display: none; }
+  body.export .deck {
+    gap: 0;
+    padding: 0;
+    align-items: flex-start;
+  }
+  body.export .slide-wrap:not(:has(.export-target)) { display: none; }
+  body.export .slide-wrap {
+    width: var(--slide-w);
+    height: var(--slide-h);
+  }
+  body.export .slide {
+    transform: none !important;
+    margin: 0 !important;
+  }
+  body.export .slide:not(.export-target) { display: none; }
+  body.export .slide.export-target {
+    display: block;
+    position: fixed;
+    inset: 0;
+  }
+
+  .frame {
+    position: absolute;
+    inset: 42px;
+    border: 1px solid var(--line);
+    pointer-events: none;
+  }
+  .frame::before,
+  .frame::after {
+    content: "";
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    border: 1.5px solid var(--gold);
+  }
+  .frame::before { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
+  .frame::after { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
+
+  .slide-inner {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    padding: 72px 78px 70px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .topbar {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 36px;
+  }
+  .logo {
+    width: 210px;
+    height: auto;
+    display: block;
+  }
+  .logo-mark {
+    width: 78px;
+    height: auto;
+    display: block;
+    margin-bottom: 10px;
+  }
+  .eyebrow {
+    font-size: 15px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 600;
+  }
+  .slide-title {
+    font-family: Unbounded, sans-serif;
+    font-weight: 600;
+    font-size: 56px;
+    line-height: 1.05;
+    color: var(--ink);
+    margin-top: 8px;
+  }
+  .slide-note {
+    margin-top: 10px;
+    font-size: 18px;
+    color: var(--muted);
+  }
+
+  .orn {
+    width: 88px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 18px 0 0;
+  }
+
+  .content {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .section { }
+  .section-name {
+    font-family: Unbounded, sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--gold);
+    letter-spacing: 0.02em;
+    margin-bottom: 14px;
+  }
+  .items { display: flex; flex-direction: column; gap: 12px; }
+
+  .item { }
+  .item-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 18px;
+    align-items: baseline;
+  }
+  .item-name {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+  .item-price {
+    font-family: Unbounded, sans-serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .item-price::after { content: " ₽"; color: var(--gold); font-size: 0.85em; }
+  .item-desc {
+    margin-top: 4px;
+    font-size: 17px;
+    color: var(--muted);
+    line-height: 1.35;
+  }
+  .variants {
+    margin-top: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-left: 14px;
+    border-left: 2px solid var(--line);
+  }
+  .variant {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    font-size: 19px;
+  }
+  .variant-name { color: var(--muted); }
+  .variant-price {
+    font-family: Unbounded, sans-serif;
+    font-size: 18px;
+    white-space: nowrap;
+  }
+  .variant-price::after { content: " ₽"; color: var(--gold); font-size: 0.85em; }
+
+  .cols-2 .content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 36px;
+    align-content: start;
+  }
+  .cols-2 .section { break-inside: avoid; }
+
+  .footer {
+    margin-top: auto;
+    padding-top: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--line);
+    font-size: 16px;
+    color: var(--muted);
+  }
+  .footer strong { color: var(--gold); font-weight: 600; }
+
+  /* Cover */
+  .cover .slide-inner {
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    padding-top: 90px;
+  }
+  .cover .logo {
+    width: 280px;
+    margin: 0 auto 28px;
+  }
+  .cover .kicker {
+    font-size: 18px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 600;
+  }
+  .cover .big {
+    font-family: Unbounded, sans-serif;
+    font-size: 120px;
+    font-weight: 600;
+    line-height: 0.95;
+    margin: 22px 0 18px;
+  }
+  .cover .sub {
+    font-size: 28px;
+    line-height: 1.4;
+    color: var(--muted);
+    white-space: pre-line;
+    max-width: 720px;
+  }
+  .cover .tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 42px;
+  }
+  .cover .tag {
+    border: 1px solid var(--line);
+    color: var(--ink);
+    padding: 10px 18px;
+    font-size: 16px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .cover .bottom {
+    position: absolute;
+    left: 78px;
+    right: 78px;
+    bottom: 78px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--muted);
+    font-size: 18px;
+  }
+  .cover .bottom span:last-child { color: var(--gold); }
+
+  /* Dense compact mode for packed slides */
+  .dense .slide-title { font-size: 46px; }
+  .dense .section-name { font-size: 19px; margin-bottom: 10px; }
+  .dense .items { gap: 8px; }
+  .dense .item-name { font-size: 20px; }
+  .dense .item-price { font-size: 18px; }
+  .dense .item-desc { font-size: 15px; }
+  .dense .variant { font-size: 16px; }
+  .dense .variant-price { font-size: 16px; }
+  .dense .content { gap: 20px; }
+  .dense .topbar { margin-bottom: 24px; }
+
+  .ultra .slide-title { font-size: 42px; }
+  .ultra .section-name { font-size: 17px; margin-bottom: 8px; }
+  .ultra .items { gap: 6px; }
+  .ultra .item-name { font-size: 18px; }
+  .ultra .item-price { font-size: 16px; }
+  .ultra .item-desc { font-size: 14px; }
+  .ultra .variant { font-size: 15px; }
+  .ultra .variant-price { font-size: 15px; }
+  .ultra .content { gap: 16px; }
+  .ultra .topbar { margin-bottom: 18px; }
+  .ultra .slide-inner { padding: 64px 68px 60px; }
+
+  /* CTA */
+  .cta .slide-inner {
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+  }
+  .cta .logo { width: 240px; margin-bottom: 30px; }
+  .cta .big {
+    font-family: Unbounded, sans-serif;
+    font-size: 72px;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+  .cta .sub {
+    font-size: 26px;
+    color: var(--muted);
+    white-space: pre-line;
+    line-height: 1.4;
+    margin-bottom: 48px;
+  }
+  .facts {
+    width: 100%;
+    max-width: 780px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    text-align: left;
+  }
+  .fact {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 16px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .fact-label {
+    color: var(--gold);
+    font-size: 16px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding-top: 4px;
+  }
+  .fact-value {
+    font-family: Unbounded, sans-serif;
+    font-size: 28px;
+    font-weight: 500;
+  }
+  .cta .links {
+    margin-top: 42px;
+    font-size: 20px;
+    color: var(--muted);
+  }
+  .cta .links strong { color: var(--gold); }
+</style>
+</head>
+<body>
+  <header class="page-head">
+    <h1>Меню для Instagram</h1>
+    <p>
+      Карусель 1080×1350 (4:5). Слайды ниже — превью.
+      PNG-экспорт: <code>node export.mjs</code>.
+      Исходники сканов — в <a href="source/">source/</a>.
+    </p>
+  </header>
+
+  <div class="deck" id="deck"></div>
+
+  <script src="menu-data.js"></script>
+  <script src="_export-boot.js"></script>
+  <script>
+    const deck = document.getElementById("deck");
+    const slides = window.KB_MENU.slides;
+    const total = slides.length;
+
+    function itemHTML(item) {
+      let html = `<div class="item">`;
+      if (item.price) {
+        html += `<div class="item-row"><div class="item-name">${item.name}</div><div class="item-price">${item.price}</div></div>`;
+      } else {
+        html += `<div class="item-name">${item.name}</div>`;
+      }
+      if (item.desc) html += `<div class="item-desc">${item.desc}</div>`;
+      if (item.variants) {
+        html += `<div class="variants">` + item.variants.map(v =>
+          `<div class="variant"><span class="variant-name">${v.name}</span><span class="variant-price">${v.price}</span></div>`
+        ).join("") + `</div>`;
+      }
+      html += `</div>`;
+      return html;
+    }
+
+    function densityClass(slide) {
+      if (!slide.sections) return "";
+      const count = slide.sections.reduce((n, s) => n + s.items.length + s.items.reduce((m, i) => m + (i.variants ? i.variants.length : 0), 0), 0);
+      if (count > 28) return "ultra";
+      if (count > 16 || slide.sections.length > 2) return "dense";
+      return "";
+    }
+
+    function colsClass(slide) {
+      if (!slide.sections) return "";
+      if (slide.sections.length >= 3) return "cols-2";
+      if (slide.sections.length === 2) {
+        const totalItems = slide.sections.reduce((n, s) => n + s.items.length, 0);
+        if (totalItems >= 10) return "cols-2";
+      }
+      return "";
+    }
+
+    slides.forEach((slide, idx) => {
+      const n = String(idx + 1).padStart(2, "0");
+      const wrap = document.createElement("div");
+      wrap.className = "slide-wrap";
+      wrap.innerHTML = `<div class="slide-cap">${n} / ${String(total).padStart(2, "0")} · ${slide.id}</div>`;
+
+      const el = document.createElement("article");
+      el.className = `slide ${slide.type}`;
+      el.dataset.slide = slide.id;
+      el.id = `slide-${slide.id}`;
+
+      if (slide.type === "cover") {
+        el.innerHTML = `
+          <div class="frame"></div>
+          <div class="slide-inner">
+            <img class="logo" src="logo-dark.svg" alt="Красногорские бани">
+            <div class="kicker">${slide.kicker}</div>
+            <div class="orn" style="margin:20px auto"></div>
+            <div class="big">${slide.title}</div>
+            <div class="sub">${slide.subtitle}</div>
+            <div class="tags">${slide.tags.map(t => `<span class="tag">${t}</span>`).join("")}</div>
+            <div class="bottom">
+              <span>${window.KB_MENU.address}</span>
+              <span>${window.KB_MENU.site}</span>
+            </div>
+          </div>`;
+      } else if (slide.type === "cta") {
+        el.innerHTML = `
+          <div class="frame"></div>
+          <div class="slide-inner">
+            <img class="logo" src="logo-dark.svg" alt="Красногорские бани">
+            <div class="big">${slide.title}</div>
+            <div class="sub">${slide.subtitle}</div>
+            <div class="facts">
+              ${slide.facts.map(f => `
+                <div class="fact">
+                  <div class="fact-label">${f.label}</div>
+                  <div class="fact-value">${f.value}</div>
+                </div>`).join("")}
+            </div>
+            <div class="links">WhatsApp · Telegram · <strong>${window.KB_MENU.site}</strong></div>
+          </div>`;
+      } else {
+        const dens = densityClass(slide);
+        const cols = colsClass(slide);
+        el.classList.add(...[dens, cols].filter(Boolean));
+        el.innerHTML = `
+          <div class="frame"></div>
+          <div class="slide-inner">
+            <div class="topbar">
+              <div>
+                <img class="logo-mark" src="mark.svg" alt="">
+                <div class="eyebrow">Красногорские бани</div>
+              </div>
+              <div style="text-align:right">
+                <div class="slide-title">${slide.title}</div>
+                <div class="slide-note">${slide.note || ""}</div>
+              </div>
+            </div>
+            <div class="content">
+              ${slide.sections.map(sec => `
+                <section class="section">
+                  <div class="section-name">${sec.name}</div>
+                  <div class="items">${sec.items.map(itemHTML).join("")}</div>
+                </section>`).join("")}
+            </div>
+            <div class="footer">
+              <span><strong>${n}</strong> / ${String(total).padStart(2, "0")}</span>
+              <span>${window.KB_MENU.site}</span>
+            </div>
+          </div>`;
+      }
+
+      wrap.appendChild(el);
+      deck.appendChild(wrap);
+    });
+  </script>
+</body>
+</html>
