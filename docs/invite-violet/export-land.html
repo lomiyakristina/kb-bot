@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+
+  :root {
+    --dark: #1A1512;
+    --ink: #1c1712;
+    --cream: #F5F0EB;
+    --parchment: #F7F1E6;
+    --gold: #BB8D4D;
+    --gold-deep: #9A7340;
+    --gold-soft: rgba(187, 141, 77, 0.45);
+    --muted: #7A6E60;
+    --card-w: 1536px;
+    --card-h: 1024px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: Manrope, sans-serif;
+    background: #0E0C0A;
+    color: var(--cream);
+    min-height: 100vh;
+    padding: 36px 20px 80px;
+  }
+  .page-head {
+    max-width: 720px;
+    margin: 0 auto 32px;
+    text-align: center;
+  }
+  .page-head h1 {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-weight: 600;
+    font-size: 30px;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .page-head p {
+    color: rgba(245, 240, 235, 0.65);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .deck {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 56px;
+  }
+  .wrap { width: min(100%, 768px); }
+  .cap {
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(245, 240, 235, 0.35);
+    text-align: center;
+    margin-bottom: 12px;
+  }
+
+  /* ── Landscape card (certificate style) ── */
+  .card {
+    width: var(--card-w);
+    height: var(--card-h);
+    position: relative;
+    overflow: hidden;
+    background: var(--parchment);
+    color: var(--ink);
+    display: grid;
+    grid-template-columns: 0.92fr 1.08fr;
+    transform-origin: top left;
+  }
+  @media (max-width: 1600px) {
+    .wrap.land { width: min(100%, 768px); }
+    .card { transform: scale(0.5); margin-bottom: calc(var(--card-h) * -0.5); }
+  }
+  @media (max-width: 820px) {
+    .wrap.land { width: min(100%, 384px); }
+    .card { transform: scale(0.25); margin-bottom: calc(var(--card-h) * -0.75); }
+  }
+
+  .photo {
+    position: relative;
+    overflow: hidden;
+    background: #111;
+  }
+  .photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    display: block;
+  }
+  .photo::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, transparent 70%, rgba(247, 241, 230, 0.12) 100%),
+      linear-gradient(180deg, rgba(26, 21, 18, 0.08) 0%, transparent 30%, rgba(26, 21, 18, 0.28) 100%);
+    pointer-events: none;
+  }
+
+  .panel {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 56px 64px 48px;
+    background:
+      radial-gradient(900px 520px at 50% 0%, rgba(187, 141, 77, 0.08), transparent 60%),
+      var(--parchment);
+  }
+  .frame {
+    position: absolute;
+    inset: 28px 32px;
+    border: 1px solid var(--gold-soft);
+    pointer-events: none;
+  }
+  .frame::before {
+    content: "";
+    position: absolute;
+    inset: 8px;
+    border: 1px solid rgba(187, 141, 77, 0.22);
+  }
+  .corner {
+    position: absolute;
+    width: 56px;
+    height: 56px;
+    pointer-events: none;
+  }
+  .corner svg { width: 100%; height: 100%; display: block; }
+  .corner.tl { top: 20px; left: 24px; }
+  .corner.tr { top: 20px; right: 24px; transform: scaleX(-1); }
+  .corner.bl { bottom: 20px; left: 24px; transform: scaleY(-1); }
+  .corner.br { bottom: 20px; right: 24px; transform: scale(-1); }
+
+  .inner {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 560px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .mark {
+    width: 72px;
+    height: auto;
+    margin-bottom: 14px;
+  }
+  .brand {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold-deep);
+    margin-bottom: 6px;
+  }
+  .waves {
+    width: 140px;
+    height: 10px;
+    margin-bottom: 28px;
+    color: var(--gold);
+  }
+  .eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--gold-deep);
+    margin-bottom: 16px;
+  }
+  .title {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: 54px;
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin-bottom: 18px;
+  }
+  .lead {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: 22px;
+    font-style: italic;
+    font-weight: 500;
+    color: var(--muted);
+    line-height: 1.35;
+    max-width: 420px;
+    margin-bottom: 28px;
+  }
+  .offer {
+    width: 100%;
+    border-top: 1px solid rgba(187, 141, 77, 0.35);
+    border-bottom: 1px solid rgba(187, 141, 77, 0.35);
+    padding: 22px 8px;
+    margin-bottom: 26px;
+  }
+  .offer-date {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .offer-disc {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: 44px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--gold-deep);
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+  .offer-note {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .seal {
+    width: 78px;
+    height: 78px;
+    margin-bottom: 16px;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 35% 30%, #E4C48A, #BB8D4D 45%, #8A652F 100%);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.35),
+      0 8px 18px rgba(138, 101, 47, 0.28);
+    display: grid;
+    place-items: center;
+  }
+  .seal img { width: 42px; opacity: 0.95; filter: brightness(0) invert(1); }
+  .addr {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold-deep);
+    line-height: 1.7;
+  }
+  .private {
+    margin-top: 14px;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(122, 110, 96, 0.85);
+  }
+
+  /* ── Vertical chat card (wallet / Violet) ── */
+  .vwrap { width: min(100%, 360px); }
+  .vcard {
+    width: 1080px;
+    height: 1350px;
+    position: relative;
+    overflow: hidden;
+    background: var(--dark);
+    color: var(--cream);
+    transform-origin: top left;
+  }
+  @media (max-width: 1200px) {
+    .vcard { transform: scale(calc(360 / 1080)); margin-bottom: calc(1350 * (360/1080 - 1)); }
+  }
+  .vcard .hero {
+    position: absolute;
+    inset: 0;
+  }
+  .vcard .hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 72% 42%;
+  }
+  .vcard .hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(14, 12, 10, 0.55) 0%, rgba(14, 12, 10, 0.15) 28%, rgba(14, 12, 10, 0.35) 48%, rgba(14, 12, 10, 0.92) 72%, #0E0C0A 100%);
+  }
+  .v-frame {
+    position: absolute;
+    inset: 36px;
+    border: 1px solid rgba(187, 141, 77, 0.4);
+    z-index: 2;
+    pointer-events: none;
+  }
+  .v-frame::before {
+    content: "";
+    position: absolute;
+    inset: 10px;
+    border: 1px solid rgba(187, 141, 77, 0.18);
+  }
+  .v-content {
+    position: relative;
+    z-index: 3;
+    height: 100%;
+    padding: 88px 72px 72px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .v-content .mark { width: 88px; margin-bottom: 18px; }
+  .v-content .brand {
+    color: var(--gold);
+    font-size: 20px;
+    letter-spacing: 0.3em;
+  }
+  .v-content .waves { width: 160px; margin-bottom: 48px; }
+  .v-spacer { flex: 1; }
+  .v-eyebrow {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.36em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+  }
+  .v-title {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: 72px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    line-height: 1.02;
+    margin-bottom: 18px;
+  }
+  .v-lead {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 26px;
+    color: rgba(245, 240, 235, 0.72);
+    max-width: 640px;
+    line-height: 1.35;
+    margin-bottom: 40px;
+  }
+  .v-offer {
+    width: min(100%, 720px);
+    border: 1px solid rgba(187, 141, 77, 0.45);
+    background: rgba(14, 12, 10, 0.55);
+    padding: 28px 24px 26px;
+    margin-bottom: 36px;
+  }
+  .v-offer-date {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: 30px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .v-offer-disc {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: 64px;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 0.03em;
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+  .v-offer-note {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(245, 240, 235, 0.7);
+  }
+  .v-addr {
+    font-size: 13px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    line-height: 1.8;
+  }
+  .v-private {
+    margin-top: 16px;
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(245, 240, 235, 0.4);
+  }
+
+  /* export helpers */
+  body.export { background: transparent; padding: 0; }
+  body.export .page-head,
+  body.export .cap,
+  body.export .copy-block { display: none; }
+  body.export .deck { gap: 0; padding: 0; }
+  body.export .wrap { width: auto; }
+  body.export .card,
+  body.export .vcard {
+    transform: none !important;
+    margin: 0 !important;
+  }
+  body.export .wrap:not(:has(.export-target)),
+  body.export .vwrap:not(:has(.export-target)) { display: none; }
+
+  .copy-block {
+    max-width: 640px;
+    margin: 8px auto 0;
+    padding: 24px 22px;
+    border: 1px solid rgba(187, 141, 77, 0.25);
+    background: rgba(26, 21, 18, 0.7);
+  }
+  .copy-block h2 {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: 22px;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .copy-block pre {
+    white-space: pre-wrap;
+    font-family: Manrope, sans-serif;
+    font-size: 14px;
+    line-height: 1.55;
+    color: rgba(245, 240, 235, 0.85);
+  }
+
+html,body{margin:0;padding:0;background:#F7F1E6;width:1536px;height:1024px;overflow:hidden}
+.card{transform:none!important;margin:0!important}
+</style></head><body>
+<article class="card" id="card-land" aria-label="Приглашение — горизонтальная карта">
+        <div class="photo">
+          <img src="building-wide.jpg" alt="Красногорские бани — здание вечером">
+        </div>
+        <div class="panel">
+          <div class="frame" aria-hidden="true"></div>
+          <div class="corner tl" aria-hidden="true"><svg viewBox="0 0 56 56" fill="none"><path d="M4 52V18C4 10.268 10.268 4 18 4h34" stroke="#BB8D4D" stroke-width="1.4"/><path d="M12 52V24c0-6.627 5.373-12 12-12h28" stroke="#BB8D4D" stroke-opacity=".45" stroke-width="1"/><circle cx="18" cy="18" r="2.2" fill="#BB8D4D"/><path d="M28 8c6 2 10 6 12 12" stroke="#BB8D4D" stroke-opacity=".55" stroke-width="1"/></svg></div>
+          <div class="corner tr" aria-hidden="true"><svg viewBox="0 0 56 56" fill="none"><path d="M4 52V18C4 10.268 10.268 4 18 4h34" stroke="#BB8D4D" stroke-width="1.4"/><path d="M12 52V24c0-6.627 5.373-12 12-12h28" stroke="#BB8D4D" stroke-opacity=".45" stroke-width="1"/><circle cx="18" cy="18" r="2.2" fill="#BB8D4D"/><path d="M28 8c6 2 10 6 12 12" stroke="#BB8D4D" stroke-opacity=".55" stroke-width="1"/></svg></div>
+          <div class="corner bl" aria-hidden="true"><svg viewBox="0 0 56 56" fill="none"><path d="M4 52V18C4 10.268 10.268 4 18 4h34" stroke="#BB8D4D" stroke-width="1.4"/><path d="M12 52V24c0-6.627 5.373-12 12-12h28" stroke="#BB8D4D" stroke-opacity=".45" stroke-width="1"/><circle cx="18" cy="18" r="2.2" fill="#BB8D4D"/><path d="M28 8c6 2 10 6 12 12" stroke="#BB8D4D" stroke-opacity=".55" stroke-width="1"/></svg></div>
+          <div class="corner br" aria-hidden="true"><svg viewBox="0 0 56 56" fill="none"><path d="M4 52V18C4 10.268 10.268 4 18 4h34" stroke="#BB8D4D" stroke-width="1.4"/><path d="M12 52V24c0-6.627 5.373-12 12-12h28" stroke="#BB8D4D" stroke-opacity=".45" stroke-width="1"/><circle cx="18" cy="18" r="2.2" fill="#BB8D4D"/><path d="M28 8c6 2 10 6 12 12" stroke="#BB8D4D" stroke-opacity=".55" stroke-width="1"/></svg></div>
+
+          <div class="inner">
+            <img class="mark" src="logo-mark.svg" alt="">
+            <div class="brand">Красногорские бани</div>
+            <svg class="waves" viewBox="0 0 140 10" aria-hidden="true"><path d="M0 3h52M88 3h52M56 3c4 0 6 4 14 4s10-4 14-4" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>
+            <div class="eyebrow">Личное приглашение</div>
+            <h2 class="title">Мы открылись</h2>
+            <p class="lead">Для закрытого круга — без шума и лишних глаз.</p>
+            <div class="offer">
+              <div class="offer-date">Только 22 октября</div>
+              <div class="offer-disc">−20%</div>
+              <div class="offer-note">на услуги бани и ресторана</div>
+            </div>
+            <div class="seal" aria-hidden="true">
+              <img src="logo-mark.svg" alt="">
+            </div>
+            <div class="addr">Красногорск<br>Москворецкий бульвар 2А</div>
+            <div class="private">Закрытое предложение · не для публикации</div>
+          </div>
+        </div>
+      </article>
+</body></html>
