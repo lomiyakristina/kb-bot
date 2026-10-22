@@ -1,0 +1,13 @@
+.env
+.env.*
+data/*.sqlite
+__pycache__/
+.venv/
+venv/
+*.pyc
+.DS_Store
+vault/
+owner_chat_id.txt
+leads.log
+*.session
+*.session-journal
