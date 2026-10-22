@@ -45,7 +45,7 @@ from content import (
     RITUALS,
     SITE,
     SPA,
-    STEAM_TIMES,
+    STEAM_PROGRAM,
     TARIFFS,
     TELEGRAM_URL,
     UPSELLS,
@@ -63,6 +63,7 @@ from logic import (
     host_brief,
     money,
     nearest_entry,
+    nearest_steam_line,
     normalize_phone,
     open_slots,
     rank_for,
@@ -296,6 +297,7 @@ def quote(payload: dict, now: datetime) -> dict:
 def build_catalog(now: datetime) -> dict:
     day, slot = nearest_entry(now)
     when = "Сегодня" if day == now.date() else "Завтра"
+    steam_line = nearest_steam_line(now)
     return {
         "ok": True,
         "brand": BRAND,
@@ -315,11 +317,15 @@ def build_catalog(now: datetime) -> dict:
             "price": slot.price,
             "price_label": money(slot.price),
         },
-        "steam": STEAM_TIMES["male"],
+        "nearest_steam": steam_line,
+        "steam": [
+            {"time": start, "aroma": aroma, "label": f"{start} — {aroma}"}
+            for start, aroma in STEAM_PROGRAM
+        ],
         "halls": {
             key: {
                 "title": item["title"],
-                "blocks": blocks(item["text"]),
+                "blocks": blocks(item["text"] + "\n\n" + steam_line),
                 "bookable": bool(item.get("bookable")),
             }
             for key, item in HALLS.items()

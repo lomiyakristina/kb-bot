@@ -16,11 +16,14 @@ from logic import (
     host_brief,
     money,
     nearest_entry,
+    nearest_steam_line,
     next_steam,
+    next_steam_session,
     normalize_phone,
     open_slots,
     progress_bar,
     rank_for,
+    schedule_lines,
     slots_for,
 )
 from storage import Storage
@@ -52,17 +55,29 @@ class LogicTests(unittest.TestCase):
     def test_next_steam_and_host(self) -> None:
         morning = datetime(2026, 10, 5, 9, 40, tzinfo=MSK)
         self.assertEqual(next_steam(morning), (morning.date(), "10:00"))
+        session = next_steam_session(morning)
+        self.assertEqual(session.aroma, "Чабрец")
         brief = host_brief(morning)
         self.assertIn("4 500", brief)
         self.assertIn("1 500", brief)
         self.assertIn("10:00", brief)
+        self.assertIn("Чабрец", brief)
+        self.assertIn("через 20 мин", brief)
+        afternoon = datetime(2026, 10, 5, 14, 0, tzinfo=MSK)
+        line = nearest_steam_line(afternoon)
+        self.assertIn("14:30", line)
+        self.assertIn("Пихта", line)
+        self.assertIn("через 30 мин", line)
         evening = datetime(2026, 10, 5, 22, 30, tzinfo=MSK)
         self.assertEqual(next_steam(evening)[1], "10:00")
         self.assertIn("завтра", host_brief(evening))
+        self.assertIn("Чабрец", host_brief(evening))
         day, slot = nearest_entry(morning)
         self.assertEqual(day, morning.date())
         self.assertEqual(slot.start, "10:00")
         self.assertEqual(slot.price, 4500)
+        self.assertIn("10:00 — Чабрец", schedule_lines()[0])
+        self.assertIn("19:00 — Чеснок", schedule_lines())
 
     def test_late_evening_starts_tomorrow(self) -> None:
         now = datetime(2026, 10, 5, 22, 10, tzinfo=MSK)

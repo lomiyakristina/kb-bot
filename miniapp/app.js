@@ -361,7 +361,11 @@
   function screenSchedule() {
     view.append(el("h2", null, "Авторский пар"));
     view.append(el("p", "lead", "Каждые 1,5 часа, в мужском и женском разрядах одинаково. Входит в билет."));
-    catalog.steam.forEach((time) => view.append(el("p", null, time)));
+    (catalog.steam || []).forEach((row) => {
+      const label = typeof row === "string" ? row : row.label || `${row.time} — ${row.aroma}`;
+      view.append(el("p", null, label));
+    });
+    if (catalog.nearest_steam) view.append(el("p", "lead", catalog.nearest_steam));
     view.append(el("p", "quiet", "Сеанс билета — 4 часа с момента входа."));
     const pair = el("div", "pair");
     pair.append(button("Женский", "ghost", () => openHall("female")));

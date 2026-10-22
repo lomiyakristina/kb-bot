@@ -35,6 +35,13 @@ class WebappTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(catalog["nearest"]["price"], 5700)
         self.assertEqual(catalog["nearest"]["start"], "15:00")
         self.assertIn("14:30", catalog["brief"][-1])
+        self.assertIn("Пихта", catalog["brief"][-1])
+        self.assertEqual(catalog["steam"][0]["label"], "10:00 — Чабрец")
+        self.assertIn("Пихта", catalog["nearest_steam"])
+        female_lines = " ".join(
+            line for block in catalog["halls"]["female"]["blocks"] for line in block["lines"]
+        )
+        self.assertIn("Пихта", female_lines)
 
     def test_quote_counts_adults_and_rejects_junk(self) -> None:
         now = datetime(2026, 10, 12, 9, 0, tzinfo=MSK)

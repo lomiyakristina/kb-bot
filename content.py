@@ -19,12 +19,26 @@ TELEGRAM_URL = "https://t.me/krasnogorskie_bani"
 INSTAGRAM_URL = "https://www.instagram.com/krasnogorskie.bani/"
 VK_URL = "https://vk.ru/krasnogorskiebani"
 
-# Пусто = бот не выдумывает часы парения.
-# Когда банщики дадут сетку, впишите строки: ["11:00", "13:00", "16:00"].
+# Авторский пар: время и аромат сеанса. Одинаково в мужском и женском разрядах.
+# Чтобы поменять сетку — правьте этот список; STEAM_TIMES соберётся сам.
+STEAM_PROGRAM: list[tuple[str, str]] = [
+    ("10:00", "Чабрец"),
+    ("11:30", "Мята перечная"),
+    ("13:00", "Лаванда"),
+    ("14:30", "Пихта"),
+    ("16:00", "Донник"),
+    ("17:30", "Горная мята"),
+    ("19:00", "Чеснок"),
+    ("20:30", "Полынь"),
+    ("22:00", "Микс трав"),
+]
+
 STEAM_TIMES: dict[str, list[str]] = {
-    "male": ["10:00", "11:30", "13:00", "14:30", "16:00", "17:30", "19:00", "20:30", "22:00"],
-    "female": ["10:00", "11:30", "13:00", "14:30", "16:00", "17:30", "19:00", "20:30", "22:00"],
+    "male": [time for time, _aroma in STEAM_PROGRAM],
+    "female": [time for time, _aroma in STEAM_PROGRAM],
 }
+
+STEAM_AROMAS: dict[str, str] = {time: aroma for time, aroma in STEAM_PROGRAM}
 
 # id, подпись, длительность в часах, фикс за комнату или None, лимит гостей
 OFFERS: dict[str, list[tuple]] = {

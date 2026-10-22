@@ -37,7 +37,6 @@ from content import (
     RITUALS,
     SPA,
     SPA_PHOTOS,
-    STEAM_TIMES,
     TELEGRAM_URL,
     TARIFFS,
     UPSELLS,
@@ -78,10 +77,12 @@ from logic import (
     host_brief,
     money,
     nearest_entry,
+    nearest_steam_line,
     normalize_phone,
     open_slots,
     progress_bar,
     rank_for,
+    schedule_lines,
 )
 from storage import PENDING_LIMIT, Storage
 
@@ -162,7 +163,8 @@ async def show_album(message: Message, names: list[str], text: str, fallback: st
 
 
 async def show_hall(message: Message, hall: str, notes: list[str]) -> None:
-    text = with_notes(HALLS[hall]["text"], notes)
+    body = HALLS[hall]["text"] + "\n\n" + nearest_steam_line(now_msk())
+    text = with_notes(body, notes)
     names = list(HALLS[hall].get("photos") or [HALLS[hall]["photo"]])
     await show_album(message, names, text, fallback=HALLS[hall]["photo"])
 
@@ -184,12 +186,13 @@ async def show_welcome_video(message: Message, caption: str, markup) -> None:
 
 
 def schedule_text() -> str:
-    times = ", ".join(STEAM_TIMES["male"])
+    grid = "\n".join(schedule_lines())
     return (
         "<b>Авторский пар</b>\n"
         "Каждые 1,5 часа, в мужском и женском разрядах одинаково. "
         "Входит в стоимость посещения.\n\n"
-        f"{times}\n\n"
+        f"{grid}\n\n"
+        f"{nearest_steam_line(now_msk())}\n\n"
         "Сеанс билета — 4 часа с момента входа.\n"
         f"{HOURS.capitalize()}.\n\n"
         "Чтобы занять окно, выберите разряд ниже."

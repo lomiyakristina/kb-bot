@@ -6,7 +6,7 @@ import re
 from dataclasses import dataclass
 from datetime import date, datetime, time, timedelta
 
-from content import RANKS, STEAM_TIMES
+from content import RANKS, STEAM_AROMAS, STEAM_PROGRAM, STEAM_TIMES
 
 ENTRY_HOURS = tuple(range(9, 19))
 
@@ -67,13 +67,57 @@ def open_slots(day: date, now: datetime, hours: int = 4, fixed_price: int | None
     return [slot for slot in slots if slot.start > current]
 
 
+@dataclass(frozen=True)
+class SteamSession:
+    day: date
+    start: str
+    aroma: str
+
+
 def next_steam(now: datetime) -> tuple[date, str]:
-    times = STEAM_TIMES["male"]
+    session = next_steam_session(now)
+    return session.day, session.start
+
+
+def next_steam_session(now: datetime) -> SteamSession:
+    times = STEAM_TIMES["male"] or [time for time, _ in STEAM_PROGRAM]
     current = now.strftime("%H:%M")
     upcoming = [item for item in times if item > current]
     if upcoming:
-        return now.date(), upcoming[0]
-    return now.date() + timedelta(days=1), times[0]
+        start = upcoming[0]
+        day = now.date()
+    else:
+        start = times[0]
+        day = now.date() + timedelta(days=1)
+    aroma = STEAM_AROMAS.get(start, "")
+    return SteamSession(day, start, aroma)
+
+
+def steam_wait_phrase(now: datetime, session: SteamSession) -> str:
+    hour, minute = map(int, session.start.split(":"))
+    start_at = datetime.combine(session.day, time(hour, minute), tzinfo=now.tzinfo)
+    total = int((start_at - now).total_seconds() // 60)
+    if total <= 0:
+        return "уже начинается"
+    hours, minutes = divmod(total, 60)
+    if hours and minutes:
+        return f"через {hours} ч {minutes} мин"
+    if hours:
+        return f"через {hours} ч"
+    return f"через {minutes} мин"
+
+
+def nearest_steam_line(now: datetime) -> str:
+    """Короткая строка для конца блоков: разряд, расписание, «зайти сегодня»."""
+    session = next_steam_session(now)
+    when = "завтра " if session.day != now.date() else ""
+    aroma = f" — {session.aroma}" if session.aroma else ""
+    wait = steam_wait_phrase(now, session)
+    return f"Ближайший пар {when}в {session.start}{aroma} · {wait}"
+
+
+def schedule_lines() -> list[str]:
+    return [f"{start} — {aroma}" for start, aroma in STEAM_PROGRAM]
 
 
 def nearest_entry(now: datetime, hours: int = 4) -> tuple[date, Slot]:
@@ -85,9 +129,7 @@ def nearest_entry(now: datetime, hours: int = 4) -> tuple[date, Slot]:
 
 
 def host_brief(now: datetime) -> str:
-    day, steam = next_steam(now)
-    when = "сегодня" if day == now.date() else "завтра"
-    steam_line = f"Ближайший авторский пар — {when} в {steam}. Он уже в билете."
+    steam_line = nearest_steam_line(now) + ". Он уже в билете."
     if not open_slots(now.date(), now):
         tomorrow = now.date() + timedelta(days=1)
         price = ticket_price(tomorrow, 9)
